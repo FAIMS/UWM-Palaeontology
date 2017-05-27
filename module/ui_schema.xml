@@ -1,0 +1,425 @@
+<?xml version='1.0' encoding='utf-8'?>
+<h:html xmlns:h="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:jr="http://openrosa.org/javarosa" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <h:head>
+    <h:title>FILL THIS IN</h:title>
+    <model>
+      <instance>
+        <faims id="FILL_THIS_IN">
+          <!--START: Style-->
+          <style>
+            <orientation>
+              <orientation/>
+            </orientation>
+            <even>
+              <layout_weight/>
+            </even>
+            <large>
+              <layout_weight/>
+            </large>
+          </style>
+          <!--END: Style-->
+          <Login>
+            <Login>
+              <Users/>
+              <Log_in/>
+              <Sign_up/>
+            </Login>
+          </Login>
+          <Control>
+            <Main>
+              <Create_New_Locality/>
+              <Existing_Localities/>
+            </Main>
+            <IDS/>
+            <Map/>
+            <Search>
+              <Colgroup_0>
+                <Col_0>
+                  <Search_Term/>
+                </Col_0>
+                <Col_1>
+                  <Search_Button/>
+                </Col_1>
+              </Colgroup_0>
+              <Entity_Types/>
+              <Entity_List/>
+            </Search>
+          </Control>
+          <Column>
+            <Description>
+              <Column_author/>
+              <Column_timestamp/>
+              <Column_ID/>
+              <Locality_Name/>
+              <Locality_Abbreviated_Name/>
+              <Colgroup_1>
+                <Col_1>
+                  <Latitude/>
+                </Col_1>
+                <Col_2>
+                  <Longitude/>
+                </Col_2>
+              </Colgroup_1>
+              <Colgroup_2>
+                <Col_1>
+                  <Northing/>
+                </Col_1>
+                <Col_2>
+                  <Easting/>
+                </Col_2>
+                <Col_3>
+                  <Accuracy/>
+                </Col_3>
+              </Colgroup_2>
+              <Take_From_GPS_1/>
+              <Type/>
+              <Location/>
+              <Thickness_in_cm/>
+              <Description/>
+              <Section_Photo/>
+              <Attach_Sketch/>
+            </Description>
+            <Units>
+              <Create_New_Unit/>
+              <Existing_Units/>
+            </Units>
+          </Column>
+          <Unit>
+            <Main>
+              <Unit_author/>
+              <Unit_timestamp/>
+              <Locality_Abbreviated_Name/>
+              <Unit_ID/>
+              <Starts_at_in_cm/>
+              <Ends_at_in_cm/>
+              <Composition/>
+              <Fossil_Type/>
+              <Fossil_Subtype/>
+              <Fossil_Percentage/>
+              <Fossil_Size_in_cm/>
+              <Fossil_Shape/>
+              <Fossil_Description/>
+              <Rock_Type/>
+              <Component_Type/>
+              <Interpretation/>
+              <Unit_Photo/>
+            </Main>
+            <Samples>
+              <Create_New_Sample/>
+              <Existing_Samples/>
+            </Samples>
+          </Unit>
+          <Sample>
+            <Info>
+              <Sample_author/>
+              <Sample_timestamp/>
+              <Locality_Abbreviated_Name/>
+              <Unit_ID/>
+              <Sample_ID/>
+              <Location_from_top_of_unit_in_cm/>
+              <Description_of_location/>
+              <Photo_of_Location/>
+              <Sample_Label/>
+              <Sample_Tag/>
+            </Info>
+          </Sample>
+        </faims>
+      </instance>
+    </model>
+  </h:head>
+  <h:body>
+    <!--START: Style-->
+    <group ref="style">
+      <label/>
+      <group ref="orientation">
+        <label/>
+        <input ref="orientation">
+          <label>horizontal</label>
+        </input>
+      </group>
+      <group ref="even">
+        <label/>
+        <input ref="layout_weight">
+          <label>1</label>
+        </input>
+      </group>
+      <group ref="large">
+        <label/>
+        <input ref="layout_weight">
+          <label>3</label>
+        </input>
+      </group>
+    </group>
+    <!--END: Style-->
+    <group ref="Login">
+      <label>{Login}</label>
+      <group ref="Login">
+        <label>{Login}</label>
+        <select1 ref="Users">
+          <label>{Users}</label>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+        <trigger ref="Log_in">
+          <label>{Log_in}</label>
+        </trigger>
+        <trigger ref="Sign_up">
+          <label>{Sign_up}</label>
+        </trigger>
+      </group>
+    </group>
+    <group ref="Control">
+      <label>{Control}</label>
+      <group ref="Main">
+        <label>{Main}</label>
+        <trigger ref="Create_New_Locality">
+          <label>{Create_New_Locality}</label>
+        </trigger>
+        <select1 appearance="compact" ref="Existing_Localities">
+          <label>{Existing_Localities}</label>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+      </group>
+      <group ref="IDS">
+        <label>{IDS}</label>
+      </group>
+      <group ref="Map">
+        <label>{Map}</label>
+      </group>
+      <group ref="Search" faims_scrollable="false">
+        <label>{Search}</label>
+        <group ref="Colgroup_0" faims_style="orientation">
+          <label/>
+          <group ref="Col_0" faims_style="even">
+            <label/>
+            <input ref="Search_Term">
+              <label>{Search_Term}</label>
+            </input>
+          </group>
+          <group ref="Col_1" faims_style="large">
+            <label/>
+            <trigger ref="Search_Button">
+              <label>{Search_Button}</label>
+            </trigger>
+          </group>
+        </group>
+        <select1 ref="Entity_Types">
+          <label>{Entity_Types}</label>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+        <select1 appearance="compact" ref="Entity_List">
+          <label>{Entity_List}</label>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+      </group>
+    </group>
+    <group ref="Column" faims_archent_type="Column">
+      <label>{Column}</label>
+      <group ref="Description">
+        <label>{Description}</label>
+        <input faims_attribute_name="Column author" faims_attribute_type="measure" ref="Column_author" faims_read_only="true">
+          <label>{Author}</label>
+        </input>
+        <input faims_attribute_name="Column timestamp" faims_attribute_type="measure" ref="Column_timestamp" faims_read_only="true">
+          <label>{Created_at}</label>
+        </input>
+        <input faims_attribute_name="Column ID" faims_attribute_type="measure" ref="Column_ID">
+          <label>{Column_ID}</label>
+        </input>
+        <input faims_attribute_name="Locality Name" faims_attribute_type="measure" ref="Locality_Name">
+          <label>{Locality_Name}</label>
+        </input>
+        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name">
+          <label>{Locality_Abbreviated_Name}</label>
+        </input>
+        <group ref="Colgroup_1" faims_style="orientation">
+          <label/>
+          <group ref="Col_1" faims_style="even">
+            <label/>
+            <input faims_attribute_name="Latitude" faims_attribute_type="measure" ref="Latitude" faims_read_only="true">
+              <label>{Latitude}</label>
+            </input>
+          </group>
+          <group ref="Col_2" faims_style="even">
+            <label/>
+            <input faims_attribute_name="Longitude" faims_attribute_type="measure" ref="Longitude" faims_read_only="true">
+              <label>{Longitude}</label>
+            </input>
+          </group>
+        </group>
+        <group ref="Colgroup_2" faims_style="orientation">
+          <label/>
+          <group ref="Col_1" faims_style="even">
+            <label/>
+            <input faims_attribute_name="Northing" faims_attribute_type="measure" ref="Northing" faims_read_only="true">
+              <label>{Northing}</label>
+            </input>
+          </group>
+          <group ref="Col_2" faims_style="even">
+            <label/>
+            <input faims_attribute_name="Easting" faims_attribute_type="measure" ref="Easting" faims_read_only="true">
+              <label>{Easting}</label>
+            </input>
+          </group>
+          <group ref="Col_3" faims_style="even">
+            <label/>
+            <input faims_attribute_name="Accuracy" faims_attribute_type="measure" ref="Accuracy" faims_read_only="true">
+              <label>{Accuracy}</label>
+            </input>
+          </group>
+        </group>
+        <trigger ref="Take_From_GPS_1">
+          <label>{Take_From_GPS}</label>
+        </trigger>
+        <input faims_attribute_name="Type" faims_attribute_type="measure" ref="Type">
+          <label>{Type}</label>
+        </input>
+        <input faims_attribute_name="Location" faims_attribute_type="measure" ref="Location">
+          <label>{Location}</label>
+        </input>
+        <input faims_attribute_name="Thickness in cm" faims_attribute_type="measure" ref="Thickness_in_cm">
+          <label>{Thickness__cm_}</label>
+        </input>
+        <input faims_attribute_name="Description" faims_attribute_type="measure" ref="Description">
+          <label>{Description}</label>
+        </input>
+        <input faims_attribute_name="Section Photo" faims_attribute_type="measure" ref="Section_Photo">
+          <label>{Section_Photo}</label>
+        </input>
+        <input faims_attribute_name="Attach Sketch" faims_attribute_type="measure" ref="Attach_Sketch">
+          <label>{Attach_Sketch}</label>
+        </input>
+      </group>
+      <group ref="Units">
+        <label>{Units}</label>
+        <trigger ref="Create_New_Unit">
+          <label>{Create_New_Unit}</label>
+        </trigger>
+        <select1 appearance="compact" ref="Existing_Units">
+          <label>{Existing_Units}</label>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+      </group>
+    </group>
+    <group ref="Unit" faims_archent_type="Unit">
+      <label>{Unit}</label>
+      <group ref="Main">
+        <label>{Main}</label>
+        <input faims_attribute_name="Unit author" faims_attribute_type="measure" ref="Unit_author" faims_read_only="true">
+          <label>{Author}</label>
+        </input>
+        <input faims_attribute_name="Unit timestamp" faims_attribute_type="measure" ref="Unit_timestamp" faims_read_only="true">
+          <label>{Created_at}</label>
+        </input>
+        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name">
+          <label>{Locality_Abbreviated_Name}</label>
+        </input>
+        <input faims_attribute_name="Unit ID" faims_attribute_type="measure" ref="Unit_ID">
+          <label>{Unit_ID}</label>
+        </input>
+        <input faims_attribute_name="Starts at in cm" faims_attribute_type="measure" ref="Starts_at_in_cm">
+          <label>{Starts_at_in_cm}</label>
+        </input>
+        <input faims_attribute_name="Ends at in cm" faims_attribute_type="measure" ref="Ends_at_in_cm">
+          <label>{Ends_at_in_cm}</label>
+        </input>
+        <input faims_attribute_name="Composition" faims_attribute_type="measure" ref="Composition">
+          <label>{Composition}</label>
+        </input>
+        <input faims_attribute_name="Fossil Type" faims_attribute_type="measure" ref="Fossil_Type">
+          <label>{Fossil_Type}</label>
+        </input>
+        <input faims_attribute_name="Fossil Subtype" faims_attribute_type="measure" ref="Fossil_Subtype">
+          <label>{Fossil_Subtype}</label>
+        </input>
+        <input faims_attribute_name="Fossil Percentage" faims_attribute_type="measure" ref="Fossil_Percentage">
+          <label>{Fossil_Percentage}</label>
+        </input>
+        <input faims_attribute_name="Fossil Size in cm" faims_attribute_type="measure" ref="Fossil_Size_in_cm">
+          <label>{Fossil_Size_in_cm}</label>
+        </input>
+        <input faims_attribute_name="Fossil Shape" faims_attribute_type="measure" ref="Fossil_Shape">
+          <label>{Fossil_Shape}</label>
+        </input>
+        <input faims_attribute_name="Fossil Description" faims_attribute_type="measure" ref="Fossil_Description">
+          <label>{Fossil_Description}</label>
+        </input>
+        <input faims_attribute_name="Rock Type" faims_attribute_type="measure" ref="Rock_Type">
+          <label>{Rock_Type}</label>
+        </input>
+        <input faims_attribute_name="Component Type" faims_attribute_type="measure" ref="Component_Type">
+          <label>{Component_Type}</label>
+        </input>
+        <input faims_attribute_name="Interpretation" faims_attribute_type="measure" ref="Interpretation">
+          <label>{Interpretation}</label>
+        </input>
+        <input faims_attribute_name="Unit Photo" faims_attribute_type="measure" ref="Unit_Photo">
+          <label>{Unit_Photo}</label>
+        </input>
+      </group>
+      <group ref="Samples">
+        <label>{Samples}</label>
+        <trigger ref="Create_New_Sample">
+          <label>{Create_New_Sample}</label>
+        </trigger>
+        <select1 appearance="compact" ref="Existing_Samples">
+          <label>{Existing_Samples}</label>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+      </group>
+    </group>
+    <group ref="Sample" faims_archent_type="Sample">
+      <label>{Sample}</label>
+      <group ref="Info">
+        <label>{Info}</label>
+        <input faims_attribute_name="Sample author" faims_attribute_type="measure" ref="Sample_author" faims_read_only="true">
+          <label>{Author}</label>
+        </input>
+        <input faims_attribute_name="Sample timestamp" faims_attribute_type="measure" ref="Sample_timestamp" faims_read_only="true">
+          <label>{Created_at}</label>
+        </input>
+        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name">
+          <label>{Locality_Abbreviated_Name}</label>
+        </input>
+        <input faims_attribute_name="Unit ID" faims_attribute_type="measure" ref="Unit_ID">
+          <label>{Unit_ID}</label>
+        </input>
+        <input faims_attribute_name="Sample ID" faims_attribute_type="measure" ref="Sample_ID">
+          <label>{Sample_ID}</label>
+        </input>
+        <input faims_attribute_name="Location from top of unit in cm" faims_attribute_type="measure" ref="Location_from_top_of_unit_in_cm">
+          <label>{Location_from_top_of_unit__cm_}</label>
+        </input>
+        <input faims_attribute_name="Description of location" faims_attribute_type="measure" ref="Description_of_location">
+          <label>{Description_of_location}</label>
+        </input>
+        <input faims_attribute_name="Photo of Location" faims_attribute_type="measure" ref="Photo_of_Location">
+          <label>{Photo_of_Location}</label>
+        </input>
+        <input faims_attribute_name="Sample Label" faims_attribute_type="measure" ref="Sample_Label">
+          <label>{Sample_Label}</label>
+        </input>
+        <input faims_attribute_name="Sample Tag" faims_attribute_type="measure" ref="Sample_Tag">
+          <label>{Sample_Tag}</label>
+        </input>
+      </group>
+    </group>
+  </h:body>
+</h:html>
