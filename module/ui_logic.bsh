@@ -918,8 +918,20 @@ void timedPopulateCursorList(String ref, String q, int limit) {
 
 void setUpTypeHierarchy() {
   //- 
+  //  - Column
+  //    - Unit
+  //      - Sample
 
   n0 = Tree("", 1);
+  n1 = Tree("Column", 1);
+  n2 = Tree("Unit", 1);
+  n3 = Tree("Sample", 1);
+
+  n0.addChild(n1);
+
+  n1.addChild(n2);
+
+  n2.addChild(n3);
 
 
   PERF_TYPE_TREE = n0;
@@ -1778,15 +1790,12 @@ void makeVocab(
 /* default, which is the vocabid.                                             */
 /******************************************************************************/
 // Map from vocabid to vocabname. Populated by `fetchMenuValues()`.
-Map VOCABID_TO_VOCABNAME        = null;
-Map VOCABNAME_TO_VOCABID        = null;
-Map ATTRIB_NAME_TO_VOCABIDS     = null;
-Map ATTRIB_NAME_TO_MENU_ENTRIES = null;
+Map VOCABID_TO_VOCABNAME        = new HashMap();
+Map VOCABNAME_TO_VOCABID        = new HashMap();
+Map ATTRIB_NAME_TO_VOCABIDS     = new HashMap();
+Map ATTRIB_NAME_TO_MENU_ENTRIES = new HashMap();
 
 void setVocabId(String attrName, String vocabName, String vocabId) {
-  if (VOCABNAME_TO_VOCABID == null)
-    VOCABNAME_TO_VOCABID = new HashMap();
-
   String key = attrName + SEP + vocabName;
   String val = vocabId;
 
@@ -1798,9 +1807,6 @@ String getVocabId(String attrName, String vocabName) {
 }
 
 void addVocabId(String attrName, String vocabId) {
-  if (ATTRIB_NAME_TO_VOCABIDS == null)
-    ATTRIB_NAME_TO_VOCABIDS = new HashMap();
-
   List vocabIds = ATTRIB_NAME_TO_VOCABIDS.get(attrName);
   if (vocabIds == null) {
     vocabIds = new ArrayList();
@@ -1816,9 +1822,6 @@ void addMenuEntry(
     String vocabName,
     String picUrl
 ) {
-  if (ATTRIB_NAME_TO_MENU_ENTRIES == null)
-    ATTRIB_NAME_TO_MENU_ENTRIES = new HashMap();
-
   List menuEntries = ATTRIB_NAME_TO_MENU_ENTRIES.get(attrName);
   if (menuEntries == null) {
     menuEntries = new ArrayList();
@@ -1855,8 +1858,6 @@ List getVocabIdsFromRef(String ref) {
  * every menu.
  */
 void fetchMenuValues(String cb) {
-  VOCABID_TO_VOCABNAME = new HashMap();
-
   String q = "";
   q += "   SELECT vocabid, vocabname, attributename, pictureurl";
   q += "     FROM vocabulary";
@@ -2109,6 +2110,13 @@ String getUserMenuValue(int i) {
 
 }
 
+void resetUser() {
+  userId   = "0";
+  username = "";
+  User user = new User(userId, "", "", "", "");
+  setUser(user);
+}
+
 void selectUser() {
   userId           = getUserMenuValue(0);
   String nameFirst = getUserMenuValue(1);
@@ -2117,16 +2125,28 @@ void selectUser() {
   String password  = getUserMenuValue(4);
   username         = nameFirst + " " + nameLast;
 
-  if (!isNull(userId)) {
-    User user = new User(userId, nameFirst, nameLast, email, password);
-    setUser(user);
-  }
+  User user = new User(userId, nameFirst, nameLast, email, password);
+  setUser(user);
+}
+
+void onClickSignup__ () {
+  setSyncEnabled(true);
+  showCreateUserDialog("onSignupSuccessful()");
+}
+
+void onSignupSuccessful() {
+  showWarning("{signup_head}", "{signup_body}");
+  populateListForUsers();
 }
 
 if (!isNull(USER_MENU_PATH)) {
+  addOnEvent(getTabGroupRef(USER_MENU_PATH), "show", "resetUser()");
+
   addOnEvent(USER_MENU_PATH, "show",  "populateListForUsers()");
   addOnEvent(USER_MENU_PATH, "click", "selectUser()");
 }
+
+addOnEvent("Login/Login/Sign_up", "click", "onClickSignup__()");
 
 /******************************************************************************/
 /*                                 VALIDATION                                 */
@@ -2343,6 +2363,16 @@ void onClickControlMainCreateNewLocality () {
   newColumn();
 }
 
+void onValidClickLoginLoginLogin () {
+  newTab("Control", true);
+}
+
+
+
+void onClickLoginLoginLogin () {
+  showVerifyUserDialog("onValidClickLoginLoginLogin()");
+}
+
 void onClickColumnUnitsCreateNewUnit () {
   String tabgroup = "Column";
   triggerAutoSave();
@@ -2359,18 +2389,17 @@ void onClickUnitSamplesCreateNewSample () {
   newSample();
 }
 addOnEvent("Control/Main/Create_New_Locality", "click", "onClickControlMainCreateNewLocality()");
+addOnEvent("Login/Login/Log_in", "click", "onClickLoginLoginLogin()");
 addOnEvent("Column/Units/Create_New_Unit", "click", "onClickColumnUnitsCreateNewUnit()");
 addOnEvent("Unit/Samples/Create_New_Sample", "click", "onClickUnitSamplesCreateNewSample()");
 
 /******************************************************************************/
 /*                   AUDIO, CAMERA, FILE AND VIDEO BINDINGS                   */
 /******************************************************************************/
-
 addOnEvent("Column/Description/Section_Photo_Button_1", "click", "attachPictureTo(\"Column/Description/Section_Photo\")");
 addOnEvent("Unit/Main/Unit_Photo_Button_1", "click", "attachPictureTo(\"Unit/Main/Unit_Photo\")");
 addOnEvent("Sample/Info/Photo_of_Location_Button_1", "click", "attachPictureTo(\"Sample/Info/Photo_of_Location\")");
 addOnEvent("Column/Description/Attach_Sketch_Button_1", "click", "attachFileTo(\"Column/Description/Attach_Sketch\")");
-
 
 /******************************************************************************/
 /*                 BINDINGS FOR 'VIEW ATTACHED FILES' BUTTONS                 */
@@ -3446,49 +3475,6 @@ addOnEvent("Unit/Samples/Existing_Samples", "click", "loadEntity()");
 /*                             HANDWRITTEN LOGIC                              */
 /******************************************************************************/
 
-    /*********************************** LOGIN ************************************/
-      // Overrides autogenerated definition
-      selectUser () {
-        String userVocabId  = getFieldValue(userMenuPath);
-        if (isNull(userVocabId))
-          return;
-        String userQ = "SELECT userid,fname,lname,email,password FROM user " +
-                       "WHERE  userid='" + userVocabId + "';";
-        FetchCallback callback = new FetchCallback() {
-          onFetch(result) {
-            user = new User(
-                  result.get(0),
-                  result.get(1),
-                  result.get(2),
-                  result.get(3),
-                  result.get(4)
-            );
-            setUser(user);
-            username = result.get(1) + " " + result.get(2);
-          }
-        };
-        fetchOne(userQ, callback);
-      }
-      onClickLogin () {
-        showVerifyUserDialog("doUserLogin()");
-      }
-      onClickSignup () {
-        setSyncEnabled(true);
-        showCreateUserDialog("signupSuccessful()");
-      }
-      signupSuccessful() {
-        String head  = "Signup Successful";
-        String body  = "You have successfuly signed up. You may now log in as the ";
-               body += "newly created user.";
-        showWarning(head, body);
-        populateListForUsers();
-      }
-      doUserLogin () {
-        newTab("Control", true);
-      }
-      addOnEvent("Login/Login/Log_in",  "click", "onClickLogin()");
-      addOnEvent("Login/Login/Sign_up", "click", "onClickSignup()");
-  
 
 /******************************************************************************/
 /*                                    INIT                                    */
