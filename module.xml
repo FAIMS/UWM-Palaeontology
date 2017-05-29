@@ -20,12 +20,26 @@
   </Control>
   <Column>
     <Description>
-      <author/>
-      <timestamp>
+      <author f="id nocertainty noannotation">
+        <str>
+          <pos>2</pos>
+          <fmt>$2- </fmt>
+        </str>
+      </author>
+      <timestamp f="id nocertainty noannotation">
         Created at
+        <str>
+          <pos>3</pos>
+          <fmt>$2</fmt>
+        </str>
       </timestamp>
       <Locality_Name/>
-      <Locality_Abbreviated_Name/>
+      <Locality_Abbreviated_Name f="id">
+        <str>
+          <pos>1</pos>
+          <fmt>$2- </fmt>
+        </str>
+      </Locality_Abbreviated_Name>
       <gps/>
       <Type t="dropdown"/>
       <Location/>
@@ -33,8 +47,8 @@
         Thickness (cm)
       </Thickness_in_cm>
       <Description/>
-      <Section_Photo/>
-      <Attach_Sketch/>
+      <Section_Photo t="camera"/>
+      <Attach_Sketch t="file"/>
     </Description>
     <Units f="noscroll">
       <Create_New_Unit t="button" f="nocertainty noannotation" lc="Unit"/>
@@ -43,15 +57,35 @@
   </Column>
   <Unit>
     <Main>
-      <author/>
-      <timestamp>
+      <author f="nocertainty noannotation"/>
+      <timestamp f="nocertainty noannotation">
         Created at
       </timestamp>
-      <Locality_Abbreviated_Name/>
-      <Unit_ID b="decimal"/>
-      <Starts_at_in_cm b="decimal"/>
-      <Ends_at_in_cm b="decimal"/>
-      <Composition/>
+      <Locality_Abbreviated_Name f="id" i="Column/Description/Locality_Abbreviated_Name">
+        <str>
+          <pos>1</pos>
+          <fmt>$2- </fmt>
+        </str>
+      </Locality_Abbreviated_Name>
+      <Unit_ID b="decimal" f="id nocertainty noannotation">
+        <str>
+        <pos>2</pos>
+        <fmt>$2- </fmt>
+        </str>
+      </Unit_ID>
+      <Starts_at_in_cm b="decimal" f="id">
+        <str>
+        <pos>3</pos>
+        <fmt>$2- </fmt>
+        </str>
+      </Starts_at_in_cm>
+      <Ends_at_in_cm b="decimal" f="id">
+        <str>
+        <pos>4</pos>
+        <fmt>$2</fmt>
+        </str>
+      </Ends_at_in_cm>
+      <Composition t="checkbox"/>
       <Fossil_Type t="dropdown"/>
       <Fossil_Subtype/>
       <Fossil_Percentage b="decimal"/>
@@ -61,7 +95,7 @@
       <Rock_Type t="dropdown"/>
       <Component_Type t="dropdown"/>
       <Interpretation/>
-      <Unit_Photo/>
+      <Unit_Photo t="camera"/>
     </Main>
     <Samples f="noscroll">
       <Create_New_Sample t="button" f="nocertainty noannotation" lc="Sample"/>
@@ -70,18 +104,37 @@
   </Unit>
   <Sample>
     <Info>
-      <author/>
-      <timestamp>
+      <author f="nocertainty noannotation"/>
+      <timestamp f="nocertainty noannotation">
         Created at
       </timestamp>
-      <Locality_Abbreviated_Name/>
-      <Unit_ID/>
-      <Sample_ID b="decimal"/>
-      <Location_from_top_of_unit_in_cmb="decimal">
+      <Locality_Abbreviated_Name f="id nocertainty noannotation" i="Unit/Main/Locality_Abbreviated_Name">
+        <str>
+          <pos>1</pos>
+          <fmt>$2- </fmt>
+        </str>
+      </Locality_Abbreviated_Name>
+      <Unit_ID f="id" i="Unit/Main/Unit_ID">
+        <str>
+          <pos>2</pos>
+          <fmt>$2- </fmt>
+        </str>
+      </Unit_ID>
+      <Sample_ID b="decimal" f="id autonum">
+        <str>
+          <pos>3</pos>
+          <fmt>$2- </fmt>
+        </str>
+      </Sample_ID>
+      <Location_from_top_of_unit_in_cm b="decimal" f="id">
         Location from top of unit (cm)
+        <str>
+          <pos>4</pos>
+          <fmt>$2</fmt>
+        </str>
       </Location_from_top_of_unit_in_cm>
       <Description_of_location/>
-      <Photo_of_Location/>
+      <Photo_of_Location t="camera"/>
       <Sample_Label/>
       <Sample_Tag/>
     </Info>
