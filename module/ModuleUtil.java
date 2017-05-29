@@ -141,6 +141,24 @@ public class ModuleUtil extends ModuleHelper {
     }
     /*
         Type: button
+        Ref:  Column/Description/Button_Attach_Sketch
+     */
+    public static View get_Column_Description_ButtonAttachSketch(Solo solo) {
+        String ref = "Column/Description/Button_Attach_Sketch";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: button
+        Ref:  Column/Description/Button_Section_Photo
+     */
+    public static View get_Column_Description_ButtonSectionPhoto(Solo solo) {
+        String ref = "Column/Description/Button_Section_Photo";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: button
         Ref:  Column/Units/Create_New_Unit
      */
     public static View get_Column_Units_CreateNewUnit(Solo solo) {
@@ -186,10 +204,64 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: button
+        Ref:  Sample/Info/Button_Photo_of_Location
+     */
+    public static View get_Sample_Info_ButtonPhotoofLocation(Solo solo) {
+        String ref = "Sample/Info/Button_Photo_of_Location";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: button
+        Ref:  Unit/Main/Button_Unit_Photo
+     */
+    public static View get_Unit_Main_ButtonUnitPhoto(Solo solo) {
+        String ref = "Unit/Main/Button_Unit_Photo";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: button
         Ref:  Unit/Samples/Create_New_Sample
      */
     public static View get_Unit_Samples_CreateNewSample(Solo solo) {
         String ref = "Unit/Samples/Create_New_Sample";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: checkbox
+        Ref:  Unit/Main/Composition
+     */
+    public static View get_Unit_Main_Composition(Solo solo) {
+        String ref = "Unit/Main/Composition";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Column/Description/Attach_Sketch
+     */
+    public static View get_Column_Description_AttachSketch(Solo solo) {
+        String ref = "Column/Description/Attach_Sketch";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Column/Description/Section_Photo
+     */
+    public static View get_Column_Description_SectionPhoto(Solo solo) {
+        String ref = "Column/Description/Section_Photo";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Column/Description/Type
+     */
+    public static View get_Column_Description_Type(Solo solo) {
+        String ref = "Column/Description/Type";
         return (android.view.View) solo.getView((Object) ref);
     }
 
@@ -203,12 +275,48 @@ public class ModuleUtil extends ModuleHelper {
     }
 
     /*
-        Type: input
-        Ref:  Column/Description/Attach_Sketch
+        Type: dropdown
+        Ref:  Sample/Info/Photo_of_Location
      */
-    public static EditText get_Column_Description_AttachSketch(Solo solo) {
-        String ref = "Column/Description/Attach_Sketch";
-        return (android.widget.EditText) solo.getView((Object) ref);
+    public static View get_Sample_Info_PhotoofLocation(Solo solo) {
+        String ref = "Sample/Info/Photo_of_Location";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Unit/Main/Component_Type
+     */
+    public static View get_Unit_Main_ComponentType(Solo solo) {
+        String ref = "Unit/Main/Component_Type";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Unit/Main/Fossil_Type
+     */
+    public static View get_Unit_Main_FossilType(Solo solo) {
+        String ref = "Unit/Main/Fossil_Type";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Unit/Main/Rock_Type
+     */
+    public static View get_Unit_Main_RockType(Solo solo) {
+        String ref = "Unit/Main/Rock_Type";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: dropdown
+        Ref:  Unit/Main/Unit_Photo
+     */
+    public static View get_Unit_Main_UnitPhoto(Solo solo) {
+        String ref = "Unit/Main/Unit_Photo";
+        return (android.view.View) solo.getView((Object) ref);
     }
 
     /*
@@ -218,15 +326,6 @@ public class ModuleUtil extends ModuleHelper {
     public static View get_Column_Description_Author(Solo solo) {
         String ref = "Column/Description/Author";
         return (android.view.View) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
-        Ref:  Column/Description/Column_ID
-     */
-    public static EditText get_Column_Description_ColumnID(Solo solo) {
-        String ref = "Column/Description/Column_ID";
-        return (android.widget.EditText) solo.getView((Object) ref);
     }
 
     /*
@@ -303,15 +402,6 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: input
-        Ref:  Column/Description/Section_Photo
-     */
-    public static EditText get_Column_Description_SectionPhoto(Solo solo) {
-        String ref = "Column/Description/Section_Photo";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
         Ref:  Column/Description/Thickness_in_cm
      */
     public static EditText get_Column_Description_Thicknessincm(Solo solo) {
@@ -330,11 +420,20 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: input
-        Ref:  Column/Description/Type
+        Ref:  Control/IDS/Next_Sample_ID
      */
-    public static EditText get_Column_Description_Type(Solo solo) {
-        String ref = "Column/Description/Type";
-        return (android.widget.EditText) solo.getView((Object) ref);
+    public static View get_Control_IDS_NextSampleID(Solo solo) {
+        String ref = "Control/IDS/Next_Sample_ID";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: input
+        Ref:  Control/IDS/Next_Unit_ID
+     */
+    public static View get_Control_IDS_NextUnitID(Solo solo) {
+        String ref = "Control/IDS/Next_Unit_ID";
+        return (android.view.View) solo.getView((Object) ref);
     }
 
     /*
@@ -388,15 +487,6 @@ public class ModuleUtil extends ModuleHelper {
      */
     public static EditText get_Sample_Info_Locationfromtopofunitincm(Solo solo) {
         String ref = "Sample/Info/Location_from_top_of_unit_in_cm";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
-        Ref:  Sample/Info/Photo_of_Location
-     */
-    public static EditText get_Sample_Info_PhotoofLocation(Solo solo) {
-        String ref = "Sample/Info/Photo_of_Location";
         return (android.widget.EditText) solo.getView((Object) ref);
     }
 
@@ -456,24 +546,6 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: input
-        Ref:  Unit/Main/Component_Type
-     */
-    public static EditText get_Unit_Main_ComponentType(Solo solo) {
-        String ref = "Unit/Main/Component_Type";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
-        Ref:  Unit/Main/Composition
-     */
-    public static EditText get_Unit_Main_Composition(Solo solo) {
-        String ref = "Unit/Main/Composition";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
         Ref:  Unit/Main/Ends_at_in_cm
      */
     public static EditText get_Unit_Main_Endsatincm(Solo solo) {
@@ -528,15 +600,6 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: input
-        Ref:  Unit/Main/Fossil_Type
-     */
-    public static EditText get_Unit_Main_FossilType(Solo solo) {
-        String ref = "Unit/Main/Fossil_Type";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
         Ref:  Unit/Main/Interpretation
      */
     public static EditText get_Unit_Main_Interpretation(Solo solo) {
@@ -550,15 +613,6 @@ public class ModuleUtil extends ModuleHelper {
      */
     public static EditText get_Unit_Main_LocalityAbbreviatedName(Solo solo) {
         String ref = "Unit/Main/Locality_Abbreviated_Name";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
-        Ref:  Unit/Main/Rock_Type
-     */
-    public static EditText get_Unit_Main_RockType(Solo solo) {
-        String ref = "Unit/Main/Rock_Type";
         return (android.widget.EditText) solo.getView((Object) ref);
     }
 
@@ -586,15 +640,6 @@ public class ModuleUtil extends ModuleHelper {
      */
     public static EditText get_Unit_Main_UnitID(Solo solo) {
         String ref = "Unit/Main/Unit_ID";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
-        Ref:  Unit/Main/Unit_Photo
-     */
-    public static EditText get_Unit_Main_UnitPhoto(Solo solo) {
-        String ref = "Unit/Main/Unit_Photo";
         return (android.widget.EditText) solo.getView((Object) ref);
     }
 

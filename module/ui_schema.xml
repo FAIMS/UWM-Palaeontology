@@ -30,7 +30,10 @@
               <Create_New_Locality/>
               <Existing_Localities/>
             </Main>
-            <IDS/>
+            <IDS>
+              <Next_Unit_ID/>
+              <Next_Sample_ID/>
+            </IDS>
             <Map/>
             <Search>
               <Colgroup_0>
@@ -49,7 +52,6 @@
             <Description>
               <Column_author/>
               <Column_timestamp/>
-              <Column_ID/>
               <Locality_Name/>
               <Locality_Abbreviated_Name/>
               <Colgroup_1>
@@ -77,7 +79,9 @@
               <Thickness_in_cm/>
               <Description/>
               <Section_Photo/>
+              <Section_Photo_Button_1/>
               <Attach_Sketch/>
+              <Attach_Sketch_Button_1/>
             </Description>
             <Units>
               <Create_New_Unit/>
@@ -103,6 +107,7 @@
               <Component_Type/>
               <Interpretation/>
               <Unit_Photo/>
+              <Unit_Photo_Button_1/>
             </Main>
             <Samples>
               <Create_New_Sample/>
@@ -119,12 +124,23 @@
               <Location_from_top_of_unit_in_cm/>
               <Description_of_location/>
               <Photo_of_Location/>
+              <Photo_of_Location_Button_1/>
               <Sample_Label/>
               <Sample_Tag/>
             </Info>
           </Sample>
         </faims>
       </instance>
+      <bind nodeset="/faims/Control/IDS/Next_Unit_ID" type="decimal"/>
+      <bind nodeset="/faims/Control/IDS/Next_Sample_ID" type="decimal"/>
+      <bind nodeset="/faims/Column/Description/Thickness_in_cm" type="decimal"/>
+      <bind nodeset="/faims/Unit/Main/Unit_ID" type="decimal"/>
+      <bind nodeset="/faims/Unit/Main/Starts_at_in_cm" type="decimal"/>
+      <bind nodeset="/faims/Unit/Main/Ends_at_in_cm" type="decimal"/>
+      <bind nodeset="/faims/Unit/Main/Fossil_Percentage" type="decimal"/>
+      <bind nodeset="/faims/Unit/Main/Fossil_Size_in_cm" type="decimal"/>
+      <bind nodeset="/faims/Sample/Info/Sample_ID" type="decimal"/>
+      <bind nodeset="/faims/Sample/Info/Location_from_top_of_unit_in_cm" type="decimal"/>
     </model>
   </h:head>
   <h:body>
@@ -172,7 +188,7 @@
     </group>
     <group ref="Control">
       <label>{Control}</label>
-      <group ref="Main">
+      <group ref="Main" faims_scrollable="false">
         <label>{Main}</label>
         <trigger ref="Create_New_Locality">
           <label>{Create_New_Locality}</label>
@@ -187,6 +203,12 @@
       </group>
       <group ref="IDS">
         <label>{IDS}</label>
+        <input ref="Next_Unit_ID" faims_style_class="required">
+          <label>{Next_Unit_ID}</label>
+        </input>
+        <input ref="Next_Sample_ID" faims_style_class="required">
+          <label>{Next_Sample_ID}</label>
+        </input>
       </group>
       <group ref="Map">
         <label>{Map}</label>
@@ -229,13 +251,10 @@
       <group ref="Description">
         <label>{Description}</label>
         <input faims_attribute_name="Column author" faims_attribute_type="measure" ref="Column_author" faims_read_only="true">
-          <label>{Author}</label>
+          <label>{Column_author}</label>
         </input>
         <input faims_attribute_name="Column timestamp" faims_attribute_type="measure" ref="Column_timestamp" faims_read_only="true">
           <label>{Created_at}</label>
-        </input>
-        <input faims_attribute_name="Column ID" faims_attribute_type="measure" ref="Column_ID">
-          <label>{Column_ID}</label>
         </input>
         <input faims_attribute_name="Locality Name" faims_attribute_type="measure" ref="Locality_Name">
           <label>{Locality_Name}</label>
@@ -282,9 +301,13 @@
         <trigger ref="Take_From_GPS_1">
           <label>{Take_From_GPS}</label>
         </trigger>
-        <input faims_attribute_name="Type" faims_attribute_type="measure" ref="Type">
+        <select1 faims_attribute_name="Type" faims_attribute_type="vocab" ref="Type">
           <label>{Type}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
         <input faims_attribute_name="Location" faims_attribute_type="measure" ref="Location">
           <label>{Location}</label>
         </input>
@@ -294,14 +317,28 @@
         <input faims_attribute_name="Description" faims_attribute_type="measure" ref="Description">
           <label>{Description}</label>
         </input>
-        <input faims_attribute_name="Section Photo" faims_attribute_type="measure" ref="Section_Photo">
+        <select faims_sync="true" type="camera" faims_attribute_name="Section Photo" faims_attribute_type="measure" ref="Section_Photo">
           <label>{Section_Photo}</label>
-        </input>
-        <input faims_attribute_name="Attach Sketch" faims_attribute_type="measure" ref="Attach_Sketch">
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select>
+        <trigger ref="Section_Photo_Button_1">
+          <label>{Section_Photo}</label>
+        </trigger>
+        <select faims_sync="true" type="file" faims_attribute_name="Attach Sketch" faims_attribute_type="measure" ref="Attach_Sketch">
           <label>{Attach_Sketch}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select>
+        <trigger ref="Attach_Sketch_Button_1">
+          <label>{Attach_Sketch}</label>
+        </trigger>
       </group>
-      <group ref="Units">
+      <group ref="Units" faims_scrollable="false">
         <label>{Units}</label>
         <trigger ref="Create_New_Unit">
           <label>{Create_New_Unit}</label>
@@ -337,12 +374,20 @@
         <input faims_attribute_name="Ends at in cm" faims_attribute_type="measure" ref="Ends_at_in_cm">
           <label>{Ends_at_in_cm}</label>
         </input>
-        <input faims_attribute_name="Composition" faims_attribute_type="measure" ref="Composition">
+        <select faims_attribute_name="Composition" faims_attribute_type="vocab" ref="Composition">
           <label>{Composition}</label>
-        </input>
-        <input faims_attribute_name="Fossil Type" faims_attribute_type="measure" ref="Fossil_Type">
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select>
+        <select1 faims_attribute_name="Fossil Type" faims_attribute_type="vocab" ref="Fossil_Type">
           <label>{Fossil_Type}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
         <input faims_attribute_name="Fossil Subtype" faims_attribute_type="measure" ref="Fossil_Subtype">
           <label>{Fossil_Subtype}</label>
         </input>
@@ -358,20 +403,35 @@
         <input faims_attribute_name="Fossil Description" faims_attribute_type="measure" ref="Fossil_Description">
           <label>{Fossil_Description}</label>
         </input>
-        <input faims_attribute_name="Rock Type" faims_attribute_type="measure" ref="Rock_Type">
+        <select1 faims_attribute_name="Rock Type" faims_attribute_type="vocab" ref="Rock_Type">
           <label>{Rock_Type}</label>
-        </input>
-        <input faims_attribute_name="Component Type" faims_attribute_type="measure" ref="Component_Type">
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
+        <select1 faims_attribute_name="Component Type" faims_attribute_type="vocab" ref="Component_Type">
           <label>{Component_Type}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
         <input faims_attribute_name="Interpretation" faims_attribute_type="measure" ref="Interpretation">
           <label>{Interpretation}</label>
         </input>
-        <input faims_attribute_name="Unit Photo" faims_attribute_type="measure" ref="Unit_Photo">
+        <select faims_sync="true" type="camera" faims_attribute_name="Unit Photo" faims_attribute_type="measure" ref="Unit_Photo">
           <label>{Unit_Photo}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select>
+        <trigger ref="Unit_Photo_Button_1">
+          <label>{Unit_Photo}</label>
+        </trigger>
       </group>
-      <group ref="Samples">
+      <group ref="Samples" faims_scrollable="false">
         <label>{Samples}</label>
         <trigger ref="Create_New_Sample">
           <label>{Create_New_Sample}</label>
@@ -410,9 +470,16 @@
         <input faims_attribute_name="Description of location" faims_attribute_type="measure" ref="Description_of_location">
           <label>{Description_of_location}</label>
         </input>
-        <input faims_attribute_name="Photo of Location" faims_attribute_type="measure" ref="Photo_of_Location">
+        <select faims_sync="true" type="camera" faims_attribute_name="Photo of Location" faims_attribute_type="measure" ref="Photo_of_Location">
           <label>{Photo_of_Location}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select>
+        <trigger ref="Photo_of_Location_Button_1">
+          <label>{Photo_of_Location}</label>
+        </trigger>
         <input faims_attribute_name="Sample Label" faims_attribute_type="measure" ref="Sample_Label">
           <label>{Sample_Label}</label>
         </input>
