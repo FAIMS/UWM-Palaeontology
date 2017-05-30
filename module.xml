@@ -98,7 +98,7 @@
       <Unit_Photo t="camera"/>
     </Main>
     <Samples f="noscroll">
-      <Create_New_Sample t="button" f="nocertainty noannotation" lc="Sample"/>
+      <Create_New_Sample t="button" f="nocertainty noannotation" lc="Sample/Info/Sample_Label"/>
       <Existing_Samples t="list" f="nocertainty noannotation" ec="Sample"/>
     </Samples>
   </Unit>

@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: 1639312a47c9726e5c6e36da15ffaf874c1fbd17
+ * GENERATED WITH FAIMS-TOOLS, SHA1: e9f254301bc03c5fbe3f6a72b0ee3dabb8841734
  */
 import android.util.Log;
 
@@ -675,7 +675,6 @@ AtomicInteger         PERF_NUM_CBS_DONE_SET  = null;
 AtomicInteger         PERF_NUM_CBS_TODO_FILE = null;
 AtomicInteger         PERF_NUM_CBS_TODO_SAVE = null;
 AtomicInteger         PERF_NUM_CBS_TODO_SET  = null;
-boolean               PERF_DO_LOG_QUERIES    = false;
 boolean               PERF_ALLOW_CREATION    = false;
 String                PERF_TEST_IMG          = "";
                       PERF_TYPE_TREE         = null;
@@ -870,21 +869,11 @@ TimedFetchCallback(String query, FetchCallback cb, int callerIdx) {
 }
 
 void timedFetchOne(String q, FetchCallback cb, int callerIdx) {
-  if (!PERF_DO_LOG_QUERIES) {
-    fetchOne(q, cb);
-    return;
-  }
-
   tcb = TimedFetchCallback(q, cb, callerIdx);
   fetchOne(q, tcb);
 }
 
 void timedFetchAll(String q, FetchCallback cb, int callerIdx) {
-  if (!PERF_DO_LOG_QUERIES) {
-    fetchAll(q, cb);
-    return;
-  }
-
   tcb = TimedFetchCallback(q, cb, callerIdx);
   fetchAll(q, tcb);
 }
@@ -906,12 +895,10 @@ void timedFetchAll(String q) {
 }
 
 void timedPopulateCursorList(String ref, String q, int limit) {
-  if (PERF_DO_LOG_QUERIES) {
-    String boundQ = q;
-    boundQ = dbReplaceFirst(boundQ, "?", limit + "");
-    boundQ = dbReplaceFirst(boundQ, "?", "0");
-    timedFetchAll(boundQ, null, 2);
-  }
+  String boundQ = q;
+  boundQ = dbReplaceFirst(boundQ, "?", limit + "");
+  boundQ = dbReplaceFirst(boundQ, "?", "0");
+  timedFetchAll(boundQ, null, 2);
 
   populateCursorList(ref, q, limit);
 }
@@ -1391,9 +1378,6 @@ void setUpPerfTestMode() {
   if (!isInTestTime())
     return;
 
-  // Enable performance logging
-  PERF_DO_LOG_QUERIES = true;
-
   // Download test image
   PerfImageDownloader().start();
 
@@ -1421,7 +1405,7 @@ void insertIntoLocalSettings(String key, String val) {
   String q = "REPLACE INTO localSettings(key, value) VALUES(%s, %s)";
   q = dbReplaceFirst(q, key);
   q = dbReplaceFirst(q, val);
-  timedFetchOne(q);
+  fetchOne(q);
 }
 
 void insertIntoLocalSettings(String key, Integer val) {
@@ -1461,7 +1445,7 @@ void setFieldValueFromLocalSettings(
     }
   };
 
-  timedFetchOne(q, set);
+  fetchOne(q, set);
 }
 
 void setFieldValueFromLocalSettings(
@@ -1889,7 +1873,7 @@ void fetchMenuValues(String cb) {
     }
   };
 
-  timedFetchAll(q, populateHashMap);
+  fetchAll(q, populateHashMap);
 }
 
 fetchMenuValues("makeVocabs()");
@@ -2092,7 +2076,7 @@ void populateListForUsers(){
   q += "   FROM user ";
   q += "  WHERE userdeleted is null";
 
-  timedFetchAll(q, new FetchCallback() {
+  fetchAll(q, new FetchCallback() {
     onFetch(result) {
       populateDropDown(USER_MENU_PATH, result, true);
     }
@@ -2374,24 +2358,11 @@ void onClickLoginLoginLogin () {
 }
 
 void onClickColumnUnitsCreateNewUnit () {
-  String tabgroup = "Column";
-  triggerAutoSave();
-  parentTabgroup   = tabgroup;
-  parentTabgroup__ = tabgroup;
-  newUnit();
-}
-
-void onClickUnitSamplesCreateNewSample () {
-  String tabgroup = "Unit";
-  triggerAutoSave();
-  parentTabgroup   = tabgroup;
-  parentTabgroup__ = tabgroup;
-  newSample();
+  newUnit("Column");
 }
 addOnEvent("Control/Main/Create_New_Locality", "click", "onClickControlMainCreateNewLocality()");
 addOnEvent("Login/Login/Log_in", "click", "onClickLoginLoginLogin()");
 addOnEvent("Column/Units/Create_New_Unit", "click", "onClickColumnUnitsCreateNewUnit()");
-addOnEvent("Unit/Samples/Create_New_Sample", "click", "onClickUnitSamplesCreateNewSample()");
 
 /******************************************************************************/
 /*                   AUDIO, CAMERA, FILE AND VIDEO BINDINGS                   */
@@ -2511,6 +2482,12 @@ void newRecord(String tabgroup) {
   newRecord(tabgroup, doUpdateRelVars);
 }
 
+void newRecord(String tabgroup, String parentTabGroup) {
+  parentTabgroup   = parentTabGroup;
+  parentTabgroup__ = parentTabGroup;
+  newRecord(tabgroup, false);
+}
+
 void newRecord(String tabgroup, boolean doUpdateRelVars) {
   if (doUpdateRelVars) {
     String uuidOld = getUuid(getDisplayedTabGroup());
@@ -2531,7 +2508,7 @@ void newRecord(String tabgroup, boolean doUpdateRelVars) {
         newRecord(tabgroup, false);
       }
     };
-    timedFetchAll(q, updateRelVars);
+    fetchAll(q, updateRelVars);
     return;
   }
 
@@ -2641,7 +2618,7 @@ void loadEntityFrom(String entityID) {
                            "  JOIN aenttype " +
                            " USING (aenttypeid) " +
                            " WHERE uuid = '" + entityID + "'";
-  timedFetchAll(getEntTypeNameQ, new FetchCallback() {
+  fetchAll(getEntTypeNameQ, new FetchCallback() {
     onFetch(result) {
       if (
           result               == null ||
@@ -2661,8 +2638,14 @@ void loadEntityFrom(String entityID) {
   });
 }
 
-void newColumn (){
+
+void newColumn(String parent){
   String tabgroup = "Column";
+  if (!isNull(parent)) {
+    triggerAutoSave();
+    parentTabgroup   = parent;
+    parentTabgroup__ = parent;
+  }
   
 
   setUuid(tabgroup, null);
@@ -2673,8 +2656,18 @@ void newColumn (){
 
   onCreateColumn__();
 }
-void newUnit (){
+
+void newColumn (){
+  newColumn(null);
+}
+
+void newUnit(String parent){
   String tabgroup = "Unit";
+  if (!isNull(parent)) {
+    triggerAutoSave();
+    parentTabgroup   = parent;
+    parentTabgroup__ = parent;
+  }
   if (isNull("Control/IDS/Next_Unit_ID")) {
     showWarning("{Alert}", "{A_next_ID_has_not_been_entered_please_provide_one}");
     return;
@@ -2688,8 +2681,18 @@ void newUnit (){
 
   onCreateUnit__();
 }
-void newSample (){
+
+void newUnit (){
+  newUnit(null);
+}
+
+void newSample(String parent){
   String tabgroup = "Sample";
+  if (!isNull(parent)) {
+    triggerAutoSave();
+    parentTabgroup   = parent;
+    parentTabgroup__ = parent;
+  }
   if (isNull("Control/IDS/Next_Sample_ID")) {
     showWarning("{Alert}", "{A_next_ID_has_not_been_entered_please_provide_one}");
     return;
@@ -2702,6 +2705,10 @@ void newSample (){
   incAutoNum("Sample/Info/Sample_ID");
 
   onCreateSample__();
+}
+
+void newSample (){
+  newSample(null);
 }
 void onCreateColumn__(){
   String ref      = "Column";
@@ -3060,7 +3067,7 @@ void search(){
   searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
   searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
 
-  timedPopulateCursorList(refEntityList, searchQuery, 25);
+  populateCursorList(refEntityList, searchQuery, 25);
   refreshTabgroupCSS("Control");
 
   Log.d("Module", "Search query: " + searchQuery);
@@ -3178,7 +3185,7 @@ void fillInGPS(String tabgroup) {
                  "  FROM latestnondeletedarchent, vocabulary " +
                  " WHERE uuid = '" + currentUuid + "';";
 
-  timedFetchOne(query, new FetchCallback() {
+  fetchOne(query, new FetchCallback() {
     onFetch(result) {
       print("[fillInGPS()] Fetched DB transformed geometry: " + result);
       setFieldValue(tabgroupToTabRef.get(tabgroup) + "/Longitude" , result.get(0));
@@ -3209,21 +3216,34 @@ void clearGpsInTab(String tabRef) {
 /******************************************************************************/
 /*               LOADING AND CREATION OF RECORDS FROM QR CODES                */
 /******************************************************************************/
-void bindQrScanning(String refButton, String refField) {
+void bindQrScanning(String refButton, String refField, boolean isChild) {
   String event = "click";
 
-  String stmt = fun2str("scanRecordFromQrCode", refField);
+  String parentTabGroup;
+  if (isChild) parentTabGroup = getTabGroupRef(refButton);
+  else         parentTabGroup = null;
+
+  String stmt = fun2str(
+      "scanRecordFromQrCode",
+      new Object[]{parentTabGroup, refField}
+  );
 
   addOnEvent(refButton, event, stmt);
 }
 
-void scanRecordFromQrCode(String ref) {
-  String callback = fun2str("loadOrCreateEntityFromScannedAttrib", ref);
+void scanRecordFromQrCode(String parentTabGroup, String refField) {
+  String callback = fun2str(
+      "loadOrCreateEntityFromScannedAttrib",
+      new Object[]{parentTabGroup, refField}
+  );
   scanCode(callback);
 }
 
-void loadOrCreateEntityFromScannedAttrib(String ref) {
-  String attrName = getAttributeName(ref);
+void loadOrCreateEntityFromScannedAttrib(
+    String parentTabGroup,
+    String refField
+) {
+  String attrName = getAttributeName(refField);
   String attribVal  = getLastScanContents();
 
   String q = "";
@@ -3239,7 +3259,7 @@ void loadOrCreateEntityFromScannedAttrib(String ref) {
   FetchCallback loadOrCreateEntity = new FetchCallback() {
     onFetch(result) {
       if (isNull(result) || result.size() == 0) {
-        createRecordFromScannedAttrib(ref);
+        createRecordFromScannedAttrib(parentTabGroup, refField);
       } else {
         String uuid = result.get(0).get(0);
         loadEntityFrom(uuid);
@@ -3247,7 +3267,7 @@ void loadOrCreateEntityFromScannedAttrib(String ref) {
     }
   };
 
-  timedFetchAll(q, loadOrCreateEntity);
+  fetchAll(q, loadOrCreateEntity);
 }
 
 void initScannedAttrib(String ref) {
@@ -3258,14 +3278,18 @@ void initScannedAttrib(String ref) {
     setFieldValue(ref, newCode);
 }
 
-void createRecordFromScannedAttrib(String ref) {
-  String tabGroup = getTabGroupRef(ref);
-  newRecord(tabGroup);
+void createRecordFromScannedAttrib(String parentTabGroup, String refField) {
+  String tabGroup = getTabGroupRef(refField);
 
-  initScannedAttrib(ref);
+  if (isNull(parentTabGroup))
+    newRecord(tabGroup);
+  else
+    newRecord(tabGroup, parentTabGroup);
+
+  initScannedAttrib(refField);
 }
 
-
+bindQrScanning("Unit/Samples/Create_New_Sample", "Sample/Info/Sample_Label", true);
 
 /******************************************************************************/
 /*                       AUTONUMBERING HELPER FUNCTIONS                       */
@@ -3375,8 +3399,8 @@ void populateMenuWithEntities (
   else                    q = getChildEntitiesQ;
 
   switch (viewType) {
-    case "dropdown": timedFetchAll(q, cbPopulateDropDown); break;
-    case "list":     timedPopulateCursorList(ref, q, 25);  break;
+    case "dropdown": fetchAll(q, cbPopulateDropDown); break;
+    case "list":     populateCursorList(ref, q, 25); break;
   }
 }
 
