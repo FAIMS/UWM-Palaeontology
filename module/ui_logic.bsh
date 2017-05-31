@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: e9f254301bc03c5fbe3f6a72b0ee3dabb8841734
+ * GENERATED WITH FAIMS-TOOLS, SHA1: 626a01ba17c104a15d57851a04c202acc1eb5033
  */
 import android.util.Log;
 
@@ -173,6 +173,7 @@ REF_TO_TYPE.put("Unit/Main/Interpretation", "input");
 REF_TO_TYPE.put("Unit/Main/Unit_Photo", "camera");
 REF_TO_TYPE.put("Unit/Main/Unit_Photo_Button_1", "button");
 REF_TO_TYPE.put("Unit/Samples/Create_New_Sample", "button");
+REF_TO_TYPE.put("Unit/Samples/Load_Sample", "button");
 REF_TO_TYPE.put("Unit/Samples/Existing_Samples", "list");
 REF_TO_TYPE.put("Sample/Info/Sample_author", "input");
 REF_TO_TYPE.put("Sample/Info/Sample_timestamp", "input");
@@ -2360,9 +2361,14 @@ void onClickLoginLoginLogin () {
 void onClickColumnUnitsCreateNewUnit () {
   newUnit("Column");
 }
+
+void onClickUnitSamplesCreateNewSample () {
+  newSample("Unit");
+}
 addOnEvent("Control/Main/Create_New_Locality", "click", "onClickControlMainCreateNewLocality()");
 addOnEvent("Login/Login/Log_in", "click", "onClickLoginLoginLogin()");
 addOnEvent("Column/Units/Create_New_Unit", "click", "onClickColumnUnitsCreateNewUnit()");
+addOnEvent("Unit/Samples/Create_New_Sample", "click", "onClickUnitSamplesCreateNewSample()");
 
 /******************************************************************************/
 /*                   AUDIO, CAMERA, FILE AND VIDEO BINDINGS                   */
@@ -2609,6 +2615,10 @@ void loadEntity(Boolean isDropdown) {
 }
 
 void loadEntityFrom(String entityID) {
+  loadEntityFrom(entityID, "");
+}
+
+void loadEntityFrom(String entityID, String onFail) {
   if (isNull(entityID)) {
     return;
   }
@@ -2628,6 +2638,7 @@ void loadEntityFrom(String entityID) {
         String head  = "{err_load_entity_head}";
         String body  = "{err_load_entity_body}";
         showWarning(head, body);
+        execute(onFail);
         return;
       }
 
@@ -2636,6 +2647,9 @@ void loadEntityFrom(String entityID) {
       eval(loadFunction);
     }
   });
+}
+
+void showLoadEntityWarning() {
 }
 
 
@@ -3216,7 +3230,11 @@ void clearGpsInTab(String tabRef) {
 /******************************************************************************/
 /*               LOADING AND CREATION OF RECORDS FROM QR CODES                */
 /******************************************************************************/
-void bindQrScanning(String refButton, String refField, boolean isChild) {
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+
+void bindQrScanning(String refButton, String refChild, boolean isChild) {
   String event = "click";
 
   String parentTabGroup;
@@ -3225,71 +3243,41 @@ void bindQrScanning(String refButton, String refField, boolean isChild) {
 
   String stmt = fun2str(
       "scanRecordFromQrCode",
-      new Object[]{parentTabGroup, refField}
+      new Object[]{parentTabGroup, refChild}
   );
 
   addOnEvent(refButton, event, stmt);
 }
 
-void scanRecordFromQrCode(String parentTabGroup, String refField) {
+void scanRecordFromQrCode(String parentTabGroup, String refChild) {
   String callback = fun2str(
       "loadOrCreateEntityFromScannedAttrib",
-      new Object[]{parentTabGroup, refField}
+      new Object[]{parentTabGroup, refChild}
   );
   scanCode(callback);
 }
 
 void loadOrCreateEntityFromScannedAttrib(
     String parentTabGroup,
-    String refField
+    String refChild
 ) {
-  String attrName = getAttributeName(refField);
-  String attribVal  = getLastScanContents();
+  String code = getLastScanContents();
 
-  String q = "";
-  q += "SELECT uuid ";
-  q += "  FROM latestnondeletedaentvalue ";
-  q += "  JOIN latestnondeletedarchent USING (uuid) ";
-  q += "  JOIN attributekey            USING (attributeid) ";
-  q += " WHERE attributename = {attrName} ";
-  q += "   AND measure       = {attribVal} ";
-  q  = dbReplaceFirst(q, "{attrName}",  attrName );
-  q  = dbReplaceFirst(q, "{attribVal}", attribVal);
+  String  uuidString  = "";
+  Pattern uuidPattern = Pattern.compile("(\\d+0000\\d+)");
+  Matcher matcher     = uuidPattern.matcher(code);
+  while (matcher.find())
+    uuidString = matcher.group(1);
 
-  FetchCallback loadOrCreateEntity = new FetchCallback() {
-    onFetch(result) {
-      if (isNull(result) || result.size() == 0) {
-        createRecordFromScannedAttrib(parentTabGroup, refField);
-      } else {
-        String uuid = result.get(0).get(0);
-        loadEntityFrom(uuid);
-      }
-    }
-  };
+  if (isNull(uuidString)) {
+    showWarning("{load_scanned_err_head}", "{load_scanned_err_body}");
+    return;
+  }
 
-  fetchAll(q, loadOrCreateEntity);
+  loadEntityFrom(uuidString);
 }
 
-void initScannedAttrib(String ref) {
-  String oldCode = getFieldValue(ref);
-  String newCode = getLastScanContents();
-
-  if (isNull(oldCode))
-    setFieldValue(ref, newCode);
-}
-
-void createRecordFromScannedAttrib(String parentTabGroup, String refField) {
-  String tabGroup = getTabGroupRef(refField);
-
-  if (isNull(parentTabGroup))
-    newRecord(tabGroup);
-  else
-    newRecord(tabGroup, parentTabGroup);
-
-  initScannedAttrib(refField);
-}
-
-bindQrScanning("Unit/Samples/Create_New_Sample", "Sample/Info/Sample_Label", true);
+bindQrScanning("Unit/Samples/Load_Sample", "Sample", true);
 
 /******************************************************************************/
 /*                       AUTONUMBERING HELPER FUNCTIONS                       */
@@ -3335,6 +3323,10 @@ void incAutoNum(String destPath) {
   setFieldValue(destPath, destVal);
   incField(sourcePath);
 }
+/******************************************************************************/
+/*                         POPULATION VIA <MARKDOWN>                          */
+/******************************************************************************/
+
 
 /******************************************************************************/
 /*                POPULATION OF ENTITY AND CHILD ENTITY LISTS                 */

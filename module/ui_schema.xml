@@ -111,6 +111,7 @@
             </Main>
             <Samples>
               <Create_New_Sample/>
+              <Load_Sample/>
               <Existing_Samples/>
             </Samples>
           </Unit>
@@ -435,6 +436,9 @@
         <label>{Samples}</label>
         <trigger ref="Create_New_Sample">
           <label>{Create_New_Sample}</label>
+        </trigger>
+        <trigger ref="Load_Sample">
+          <label>{Load_Sample}</label>
         </trigger>
         <select1 appearance="compact" ref="Existing_Samples">
           <label>{Existing_Samples}</label>
