@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: 626a01ba17c104a15d57851a04c202acc1eb5033
+ * GENERATED WITH FAIMS-TOOLS, SHA1: 5c89a065e1158915bb1f16cb635e385b51d5c1f3
  */
 import android.util.Log;
 
@@ -31,6 +31,10 @@ if (isNull(USER_MENU_PATH)) {
 /******************************************************************************/
 /*                                STRING UTILS                                */
 /******************************************************************************/
+
+/* Works similarly to Java's String.replaceFirst, except the `needle` is a
+ * string instead of a regex.
+ */
 String replaceFirst(String haystack, String needle, String replacement) {
   i = haystack.indexOf(needle);
   if (i == -1)           return haystack;
@@ -44,13 +48,23 @@ String replaceFirst(String haystack, String replacement) {
   return replaceFirst(haystack, "%s", replacement);
 }
 
-String dbReplaceFirst(String haystack, String needle, String replacement) {
+/* Replaces `placeholder` in an SQL `query` with `replacement`. The following
+ * example returns the string
+ * "SELECT * FROM table WHERE col1 = 'my replacement'":
+ *
+ * dbReplaceFirst(
+ *     "SELECT * FROM table WHERE col1 = {my_placeholder}",
+ *     "{my_placeholder}",
+ *     "my replacement"
+ * );
+ */
+String dbReplaceFirst(String query, String placeholder, String replacement) {
   String escapedReplacement = DatabaseUtils.sqlEscapeString(replacement);
-  return replaceFirst(haystack, needle, escapedReplacement);
+  return replaceFirst(query, placeholder, escapedReplacement);
 }
 
-String dbReplaceFirst(String haystack, String replacement) {
-  return dbReplaceFirst(haystack, "%s", replacement);
+String dbReplaceFirst(String query, String replacement) {
+  return dbReplaceFirst(query, "%s", replacement);
 }
 
 String translate(String s, Map m) {
@@ -845,8 +859,8 @@ TimedFetchCallback(String query, FetchCallback cb, int callerIdx) {
     updateQuery += "             query,";
     updateQuery += "             queryStartMs,";
     updateQuery += "             queryStopMs,";
-    updateQuery += "             numAentvalue,";
     updateQuery += "             numArchentity,";
+    updateQuery += "             numAentvalue,";
     updateQuery += "             numRelationship,";
     updateQuery += "             numAentreln";
     updateQuery += " )    SELECT %s, %s, %s, %s, %s, %s, a, av, r, ar";
@@ -1107,9 +1121,8 @@ void saveArchEnts(tree, String parentUuid) {
 }
 
 void createDummyRecords() {
-  // Unless syncing is disabled, 'database locked' errors will happen
-  setFileSyncEnabled(false);
-  setSyncEnabled    (false);
+  int  n = getNumDummyRecords();
+  dialog = showBusy("{perf_dummy_busy_head}", n + " {perf_dummy_busy_body}");
 
   enqueueTestFiles("createDummyRecordsRecursively()");
 }
@@ -1118,8 +1131,6 @@ void createDummyRecordsRecursively() {
   int n = getNumDummyRecords();
   PERF_NUM_CBS_TODO_SAVE = new AtomicInteger(n);
   PERF_NUM_CBS_DONE_SAVE = new AtomicInteger(0);
-
-  dialog = showBusy("{perf_dummy_busy_head}", n + " {perf_dummy_busy_body}");
 
   for (child : PERF_TYPE_TREE.getChildren())
     saveArchEnts(child, null);
@@ -1171,27 +1182,51 @@ PerfImageDownloader() {
   void run() {
     String filStr = "/sdcard/faims/modules/" + getModuleId() +
         "/files/app/test.jpg";
-    String urlStr = "http://placeholdit.imgix.net/" +
-        "~text?txtsize=100&txt=TEST&w=200&h=200&fm=jpg";
+    String urlStr = "https://raw.githubusercontent.com/FAIMS/FAIMS-Tools/" +
+        "autogen-py/test-images/lenna-4096x4096.jpg";
 
-    // Download test image
-    new File(filStr).getParentFile().mkdirs();
+    if (detectFile(filStr))
+      return;
 
-    long tenMb = 10 * 1024 * 1024;
-    URL urlObj = new URL(urlStr);
-    ReadableByteChannel in  = Channels.newChannel(urlObj.openStream());
-    FileChannel out = new FileOutputStream(filStr).getChannel();
-    out.transferFrom(in, 0, tenMb);
+    try {
+      URL           urlObj = new URL(urlStr);
+      URLConnection urlCon = urlObj.openConnection();
+
+      new File(filStr).getParentFile().mkdirs();
+
+      InputStream      is  = urlCon.getInputStream();
+      FileOutputStream fos = new FileOutputStream(filStr);
+
+      byte[] buffer = new byte[4096];
+      int len;
+
+      // While we have availble data, continue downloading and storing to local
+      // file
+      while ((len = is.read(buffer)) > 0)
+        fos.write(buffer, 0, len);
+
+      if (is  != null) is .close();
+      if (fos != null) fos.close();
+    } catch (Exception e) {
+      Log.e("PerfImageDownloader.run()", e.getMessage());
+    }
 
     // Set `PERF_TEST_IMG` if the file was created successfully
-    File newImg = new File(filStr);
-    if (newImg.length() > 0)
-      PERF_TEST_IMG = filStr;
+    detectFile(filStr);
   }
 
   void start() {
     Runnable r = PerfImageDownloader();
     new Thread(r).start();
+  }
+
+  boolean detectFile(String filStr) {
+    File newImg = new File(filStr);
+    if (newImg.length() > 0) {
+      PERF_TEST_IMG = filStr;
+      return true;
+    }
+    return false;
   }
 
   return this;
@@ -1321,6 +1356,15 @@ void checkSetDummyRecordQuantityIsDone() {
 }
 
 void verifyCreateDummyRecords() {
+  // Unless syncing is disabled, 'database locked' errors will happen
+  setFileSyncEnabled(false);
+  setSyncEnabled    (false);
+
+  if (isSyncEnabled()) {
+    showWarning("{perf_dummy_err_head}", "{perf_dummy_err_body}");
+    return;
+  }
+
   showAlert(
       "{perf_wiz_head}",
       "{perf_wiz_body}",
@@ -3264,7 +3308,7 @@ void loadOrCreateEntityFromScannedAttrib(
   String code = getLastScanContents();
 
   String  uuidString  = "";
-  Pattern uuidPattern = Pattern.compile("(\\d+0000\\d+)");
+  Pattern uuidPattern = Pattern.compile("(\\d{19})");
   Matcher matcher     = uuidPattern.matcher(code);
   while (matcher.find())
     uuidString = matcher.group(1);

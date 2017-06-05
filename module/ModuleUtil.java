@@ -230,6 +230,15 @@ public class ModuleUtil extends ModuleHelper {
     }
 
     /*
+        Type: button
+        Ref:  Unit/Samples/Load_Sample
+     */
+    public static View get_Unit_Samples_LoadSample(Solo solo) {
+        String ref = "Unit/Samples/Load_Sample";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
         Type: checkbox
         Ref:  Unit/Main/Composition
      */
