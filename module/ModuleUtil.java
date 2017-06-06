@@ -582,15 +582,6 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: input
-        Ref:  Unit/Main/Fossil_Shape
-     */
-    public static EditText get_Unit_Main_FossilShape(Solo solo) {
-        String ref = "Unit/Main/Fossil_Shape";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
         Ref:  Unit/Main/Fossil_Size_in_cm
      */
     public static EditText get_Unit_Main_FossilSizeincm(Solo solo) {
@@ -685,6 +676,15 @@ public class ModuleUtil extends ModuleHelper {
      */
     public static View get_Unit_Samples_ExistingSamples(Solo solo) {
         String ref = "Unit/Samples/Existing_Samples";
+        return (android.view.View) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: picture
+        Ref:  Unit/Main/Fossil_Shape
+     */
+    public static View get_Unit_Main_FossilShape(Solo solo) {
+        String ref = "Unit/Main/Fossil_Shape";
         return (android.view.View) solo.getView((Object) ref);
     }
 }

@@ -41,12 +41,19 @@
         </str>
       </Locality_Abbreviated_Name>
       <gps/>
-      <Type t="dropdown"/>
+      <Type t="dropdown">
+        <opts>
+          <opt>Type 1</opt>
+          <opt>Type 2</opt>
+          <opt>Type 3</opt>
+          <opt>Other</opt>
+        </opts>
+      </Type>
       <Location/>
       <Thickness_in_cm b="decimal">
         Thickness (cm)
       </Thickness_in_cm>
-      <Description/>
+      <desc/>
       <Section_Photo t="camera"/>
       <Attach_Sketch t="file"/>
     </Description>
@@ -61,7 +68,7 @@
       <timestamp f="nocertainty noannotation">
         Created at
       </timestamp>
-      <Locality_Abbreviated_Name f="id" i="Column/Description/Locality_Abbreviated_Name">
+      <Locality_Abbreviated_Name f="id" i="Column/desc/Locality_Abbreviated_Name">
         <str>
           <pos>1</pos>
           <fmt>$2- </fmt>
@@ -74,26 +81,121 @@
         </str>
       </Unit_ID>
       <Starts_at_in_cm b="decimal" f="id">
+        Starts at (cm)
         <str>
         <pos>3</pos>
         <fmt>$2- </fmt>
         </str>
       </Starts_at_in_cm>
       <Ends_at_in_cm b="decimal" f="id">
+        Ends at (cm)
         <str>
         <pos>4</pos>
         <fmt>$2</fmt>
         </str>
       </Ends_at_in_cm>
-      <Composition t="checkbox"/>
-      <Fossil_Type t="dropdown"/>
+      <Composition t="checkbox">
+        <opts>
+          <opt>Fossil</opt>
+          <opt>Soil</opt>
+          <opt>Rock</opt>
+          <opt>Other</opt>
+        </opts>
+      </Composition>
+      <Fossil_Type t="dropdown">
+        <opts>
+          <opt>Index</opt>
+          <opt>Trace</opt>
+          <opt>Transitional</opt>
+          <opt>Microfossils</opt>
+          <opt>Resin</opt>
+          <opt>Derived</opt>
+          <opt>Wood</opt>
+          <opt>Subfossil</opt>
+          <opt>Chemical</opt>
+          <opt>Other</opt>
+        </opts>
+      </Fossil_Type>
       <Fossil_Subtype/>
       <Fossil_Percentage b="decimal"/>
-      <Fossil_Size_in_cm b="decimal"/>
-      <Fossil_Shape/>
+      <Fossil_Size_in_cm b="decimal">
+        Fossil Size (cm)
+      </Fossil_Size_in_cm>
+      <Fossil_Shape t="picture">
+        <opts>
+          <opt p="gallery/Blanks/NA.png">
+            Not observed
+            <desc>Data not collected</desc>
+          </opt>
+          <opt p="gallery/Pebbles/Angular.png">
+            Angular
+            <desc>Sharp pebbles or stones.</desc>
+            <opt p="gallery/Pebbles/AngularAngular.png">
+              Angular
+              <desc>Sharp and pointed.</desc>
+            </opt>
+            <opt p="gallery/Pebbles/AngularSub.png">
+              Sub-angular
+              <desc>A little sharp and pointed.</desc>
+            </opt>
+            <opt p="gallery/Pebbles/AngularVery.png">
+              Very angular
+              <desc>Very sharp and pointed.</desc>
+            </opt>
+          </opt>
+          <opt p="gallery/Pebbles/Rounded.png">
+            Rounded
+            <desc>Rounded stones and pebbles.</desc>
+            <opt p="gallery/Pebbles/RoundedRounded.png">
+              Rounded
+              <desc>Mostly rounded pebble or stone.</desc>
+            </opt>
+            <opt p="gallery/Pebbles/RoundedSub.png">
+              Sub-rounded
+              <desc>Some rounding to pebbles or stones.</desc>
+            </opt>
+            <opt p="gallery/Pebbles/RoundedWell.png">
+              Well-rounded
+              <desc>Very rounded pebble or stone.</desc>
+            </opt>
+          </opt>
+        </opts>
+      </Fossil_Shape>
       <Fossil_Description/>
-      <Rock_Type t="dropdown"/>
-      <Component_Type t="dropdown"/>
+      <Rock_Type t="dropdown">
+        <opts>
+          <opt>Igneous
+            <opt>Granite</opt>
+            <opt>Granodiorite</opt>
+            <opt>Diorite</opt>
+            <opt>Syenite</opt>
+            <opt>Basalt</opt>
+            <opt>Gabro</opt>
+            <opt>Amphibolite</opt>
+            <opt>Eclogite</opt>
+            <opt>Dunite</opt>
+            <opt>Periodotite</opt>
+          </opt>
+          <opt>Sedimentary
+            <opt>Sands</opt>
+            <opt>Clays</opt>
+            <opt>Shales</opt>
+            <opt>Carbonates</opt>
+          </opt>
+          <opt>Metamorphic
+            <opt>Gneiss</opt>
+            <opt>Schist</opt>
+            <opt>Marble</opt>
+          </opt>
+        </opts>
+      </Rock_Type>
+      <Component_Type t="dropdown">
+        <opts>
+          <opt>Soil</opt>
+          <opt>Inclusion</opt>
+          <opt>Other</opt>
+        </opts>
+      </Component_Type>
       <Interpretation/>
       <Unit_Photo t="camera"/>
     </Main>
@@ -134,7 +236,7 @@
           <fmt>$2</fmt>
         </str>
       </Location_from_top_of_unit_in_cm>
-      <Description_of_location/>
+      <desc_of_location/>
       <Photo_of_Location t="camera"/>
       <Sample_Label/>
       <Sample_Tag/>

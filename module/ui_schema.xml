@@ -370,10 +370,10 @@
           <label>{Unit_ID}</label>
         </input>
         <input faims_attribute_name="Starts at in cm" faims_attribute_type="measure" ref="Starts_at_in_cm">
-          <label>{Starts_at_in_cm}</label>
+          <label>{Starts_at__cm_}</label>
         </input>
         <input faims_attribute_name="Ends at in cm" faims_attribute_type="measure" ref="Ends_at_in_cm">
-          <label>{Ends_at_in_cm}</label>
+          <label>{Ends_at__cm_}</label>
         </input>
         <select faims_attribute_name="Composition" faims_attribute_type="vocab" ref="Composition">
           <label>{Composition}</label>
@@ -396,11 +396,15 @@
           <label>{Fossil_Percentage}</label>
         </input>
         <input faims_attribute_name="Fossil Size in cm" faims_attribute_type="measure" ref="Fossil_Size_in_cm">
-          <label>{Fossil_Size_in_cm}</label>
+          <label>{Fossil_Size__cm_}</label>
         </input>
-        <input faims_attribute_name="Fossil Shape" faims_attribute_type="measure" ref="Fossil_Shape">
+        <select1 type="image" faims_attribute_name="Fossil Shape" faims_attribute_type="vocab" ref="Fossil_Shape">
           <label>{Fossil_Shape}</label>
-        </input>
+          <item>
+            <label>Options not loaded</label>
+            <value>Options not loaded</value>
+          </item>
+        </select1>
         <input faims_attribute_name="Fossil Description" faims_attribute_type="measure" ref="Fossil_Description">
           <label>{Fossil_Description}</label>
         </input>

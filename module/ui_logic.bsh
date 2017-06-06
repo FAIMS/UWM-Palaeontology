@@ -179,7 +179,7 @@ REF_TO_TYPE.put("Unit/Main/Fossil_Type", "dropdown");
 REF_TO_TYPE.put("Unit/Main/Fossil_Subtype", "input");
 REF_TO_TYPE.put("Unit/Main/Fossil_Percentage", "input");
 REF_TO_TYPE.put("Unit/Main/Fossil_Size_in_cm", "input");
-REF_TO_TYPE.put("Unit/Main/Fossil_Shape", "input");
+REF_TO_TYPE.put("Unit/Main/Fossil_Shape", "picture");
 REF_TO_TYPE.put("Unit/Main/Fossil_Description", "input");
 REF_TO_TYPE.put("Unit/Main/Rock_Type", "dropdown");
 REF_TO_TYPE.put("Unit/Main/Component_Type", "dropdown");
@@ -248,7 +248,8 @@ DATA_REFS.add("Sample/Info/Sample_Tag");
 
 
 
-
+HIER_REFS.add("Unit/Main/Fossil_Shape");
+HIER_REFS.add("Unit/Main/Rock_Type");
 
 String getType(String ref) {
   String type = REF_TO_TYPE.get(ref);

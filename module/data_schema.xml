@@ -61,6 +61,16 @@
       <description></description>
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
+      <lookup>
+        <term>{Type_1}
+<description></description></term>
+        <term>{Type_2}
+<description></description></term>
+        <term>{Type_3}
+<description></description></term>
+        <term>{Other}
+<description></description></term>
+      </lookup>
     </property>
     <property name="Location" type="measure">
       <description></description>
@@ -124,11 +134,43 @@
       <description></description>
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
+      <lookup>
+        <term>{Fossil}
+<description></description></term>
+        <term>{Soil}
+<description></description></term>
+        <term>{Rock}
+<description></description></term>
+        <term>{Other}
+<description></description></term>
+      </lookup>
     </property>
     <property name="Fossil Type" type="vocab">
       <description></description>
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
+      <lookup>
+        <term>{Index}
+<description></description></term>
+        <term>{Trace}
+<description></description></term>
+        <term>{Transitional}
+<description></description></term>
+        <term>{Microfossils}
+<description></description></term>
+        <term>{Resin}
+<description></description></term>
+        <term>{Derived}
+<description></description></term>
+        <term>{Wood}
+<description></description></term>
+        <term>{Subfossil}
+<description></description></term>
+        <term>{Chemical}
+<description></description></term>
+        <term>{Other}
+<description></description></term>
+      </lookup>
     </property>
     <property name="Fossil Subtype" type="measure">
       <description></description>
@@ -145,10 +187,24 @@
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
     </property>
-    <property name="Fossil Shape" type="measure">
+    <property name="Fossil Shape" type="vocab">
       <description></description>
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
+      <lookup>
+        <term pictureURL="files/data/gallery/Blanks/NA.png">{Not_observed}
+<description>Data not collected</description></term>
+        <term pictureURL="files/data/gallery/Pebbles/Angular.png">{Angular}
+<description>Sharp pebbles or stones.</description><term pictureURL="files/data/gallery/Pebbles/AngularAngular.png">{Angular}
+<description>Sharp and pointed.</description></term><term pictureURL="files/data/gallery/Pebbles/AngularSub.png">{Sub_angular}
+<description>A little sharp and pointed.</description></term><term pictureURL="files/data/gallery/Pebbles/AngularVery.png">{Very_angular}
+<description>Very sharp and pointed.</description></term></term>
+        <term pictureURL="files/data/gallery/Pebbles/Rounded.png">{Rounded}
+<description>Rounded stones and pebbles.</description><term pictureURL="files/data/gallery/Pebbles/RoundedRounded.png">{Rounded}
+<description>Mostly rounded pebble or stone.</description></term><term pictureURL="files/data/gallery/Pebbles/RoundedSub.png">{Sub_rounded}
+<description>Some rounding to pebbles or stones.</description></term><term pictureURL="files/data/gallery/Pebbles/RoundedWell.png">{Well_rounded}
+<description>Very rounded pebble or stone.</description></term></term>
+      </lookup>
     </property>
     <property name="Fossil Description" type="measure">
       <description></description>
@@ -159,11 +215,44 @@
       <description></description>
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
+      <lookup>
+        <term>{Igneous}
+<description></description><term>{Granite}
+<description></description></term><term>{Granodiorite}
+<description></description></term><term>{Diorite}
+<description></description></term><term>{Syenite}
+<description></description></term><term>{Basalt}
+<description></description></term><term>{Gabro}
+<description></description></term><term>{Amphibolite}
+<description></description></term><term>{Eclogite}
+<description></description></term><term>{Dunite}
+<description></description></term><term>{Periodotite}
+<description></description></term></term>
+        <term>{Sedimentary}
+<description></description><term>{Sands}
+<description></description></term><term>{Clays}
+<description></description></term><term>{Shales}
+<description></description></term><term>{Carbonates}
+<description></description></term></term>
+        <term>{Metamorphic}
+<description></description><term>{Gneiss}
+<description></description></term><term>{Schist}
+<description></description></term><term>{Marble}
+<description></description></term></term>
+      </lookup>
     </property>
     <property name="Component Type" type="vocab">
       <description></description>
       <formatString>{{if $1 then $1}}{{if and($1, $2) then " " }}{{if $2 then $2}}{{if $3 then " ($3)"}}{{if between($4,0,0.49) then "??" elsif lessThan($4,1) then "?" }}</formatString>
       <appendCharacterString> - </appendCharacterString>
+      <lookup>
+        <term>{Soil}
+<description></description></term>
+        <term>{Inclusion}
+<description></description></term>
+        <term>{Other}
+<description></description></term>
+      </lookup>
     </property>
     <property name="Interpretation" type="measure">
       <description></description>
