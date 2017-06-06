@@ -122,7 +122,7 @@
               <Unit_ID/>
               <Sample_ID/>
               <Location_from_top_of_unit_in_cm/>
-              <desc_of_location/>
+              <Description_of_location/>
               <Photo_of_Location/>
               <Photo_of_Location_Button_1/>
               <Sample_Label/>
@@ -471,8 +471,8 @@
         <input faims_attribute_name="Location from top of unit in cm" faims_attribute_type="measure" ref="Location_from_top_of_unit_in_cm">
           <label>{Location_from_top_of_unit__cm_}</label>
         </input>
-        <input faims_attribute_name="desc of location" faims_attribute_type="measure" ref="desc_of_location">
-          <label>{desc_of_location}</label>
+        <input faims_attribute_name="Description of location" faims_attribute_type="measure" ref="Description_of_location">
+          <label>{Description_of_location}</label>
         </input>
         <select faims_sync="true" type="camera" faims_attribute_name="Photo of Location" faims_attribute_type="measure" ref="Photo_of_Location">
           <label>{Photo_of_Location}</label>

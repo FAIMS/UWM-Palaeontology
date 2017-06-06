@@ -465,6 +465,15 @@ public class ModuleUtil extends ModuleHelper {
 
     /*
         Type: input
+        Ref:  Sample/Info/Description_of_location
+     */
+    public static EditText get_Sample_Info_Descriptionoflocation(Solo solo) {
+        String ref = "Sample/Info/Description_of_location";
+        return (android.widget.EditText) solo.getView((Object) ref);
+    }
+
+    /*
+        Type: input
         Ref:  Sample/Info/Locality_Abbreviated_Name
      */
     public static EditText get_Sample_Info_LocalityAbbreviatedName(Solo solo) {
@@ -523,15 +532,6 @@ public class ModuleUtil extends ModuleHelper {
      */
     public static EditText get_Sample_Info_UnitID(Solo solo) {
         String ref = "Sample/Info/Unit_ID";
-        return (android.widget.EditText) solo.getView((Object) ref);
-    }
-
-    /*
-        Type: input
-        Ref:  Sample/Info/desc_of_location
-     */
-    public static EditText get_Sample_Info_descoflocation(Solo solo) {
-        String ref = "Sample/Info/desc_of_location";
         return (android.widget.EditText) solo.getView((Object) ref);
     }
 
