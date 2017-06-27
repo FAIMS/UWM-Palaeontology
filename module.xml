@@ -204,7 +204,7 @@
     <Samples f="noscroll">
       <Create_New_Sample t="button" f="nocertainty noannotation" lc="Sample"/>
       <Scan_And_Load_Sample t="button" f="nocertainty noannotation" lcq="Sample">
-        Scan &amp; Load Sample
+        Scan and Load Sample
       </Scan_And_Load_Sample>
       <Existing_Samples t="list" f="nocertainty noannotation" ec="Sample"/>
     </Samples>
