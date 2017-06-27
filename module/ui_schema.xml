@@ -35,7 +35,9 @@
               <Next_Unit_ID/>
               <Next_Sample_ID/>
             </IDS>
-            <Map/>
+            <Map>
+              <Map/>
+            </Map>
             <Search>
               <Colgroup_0>
                 <Col_0>
@@ -214,8 +216,11 @@
           <label>{Next_Sample_ID}</label>
         </input>
       </group>
-      <group ref="Map">
+      <group ref="Map" faims_scrollable="false">
         <label>{Map}</label>
+        <input faims_map="true" ref="Map">
+          <label>{Map}</label>
+        </input>
       </group>
       <group ref="Search" faims_scrollable="false">
         <label>{Search}</label>
@@ -442,7 +447,7 @@
           <label>{Create_New_Sample}</label>
         </trigger>
         <trigger ref="Scan_And_Load_Sample">
-          <label>{Scan_and_Load_Sample}</label>
+          <label>{Scan___Load_Sample}</label>
         </trigger>
         <select1 appearance="compact" ref="Existing_Samples">
           <label>{Existing_Samples}</label>
