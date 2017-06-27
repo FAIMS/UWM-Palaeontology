@@ -22,6 +22,7 @@
             <Login>
               <Users/>
               <Log_in/>
+              <Signup_Guide_1/>
               <Sign_up/>
             </Login>
           </Login>
@@ -110,7 +111,7 @@
             </Main>
             <Samples>
               <Create_New_Sample/>
-              <Load_Sample/>
+              <Scan_And_Load_Sample/>
               <Existing_Samples/>
             </Samples>
           </Unit>
@@ -181,6 +182,9 @@
         <trigger ref="Log_in">
           <label>{Log_in}</label>
         </trigger>
+        <input faims_web="true" ref="Signup_Guide_1">
+          <label/>
+        </input>
         <trigger ref="Sign_up">
           <label>{Sign_up}</label>
         </trigger>
@@ -191,7 +195,7 @@
       <group ref="Main" faims_scrollable="false">
         <label>{Main}</label>
         <trigger ref="Create_New_Locality">
-          <label>{Create_New_Locality}</label>
+          <label>{Create_New_Locality__Column_}</label>
         </trigger>
         <select1 appearance="compact" ref="Existing_Localities">
           <label>{Existing_Localities}</label>
@@ -226,7 +230,7 @@
           <group ref="Col_1" faims_style="large">
             <label/>
             <trigger ref="Search_Button">
-              <label>{Search_Button}</label>
+              <label>{Search}</label>
             </trigger>
           </group>
         </group>
@@ -437,8 +441,8 @@
         <trigger ref="Create_New_Sample">
           <label>{Create_New_Sample}</label>
         </trigger>
-        <trigger ref="Load_Sample">
-          <label>{Load_Sample}</label>
+        <trigger ref="Scan_And_Load_Sample">
+          <label>{Scan_and_Load_Sample}</label>
         </trigger>
         <select1 appearance="compact" ref="Existing_Samples">
           <label>{Existing_Samples}</label>
@@ -459,7 +463,7 @@
         <input faims_attribute_name="Sample timestamp" faims_attribute_type="measure" ref="Sample_timestamp" faims_read_only="true">
           <label>{Created_at}</label>
         </input>
-        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name">
+        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name" faims_read_only="true">
           <label>{Locality_Abbreviated_Name}</label>
         </input>
         <input faims_attribute_name="Unit ID" faims_attribute_type="measure" ref="Unit_ID">
@@ -468,7 +472,7 @@
         <input faims_attribute_name="Sample ID" faims_attribute_type="measure" ref="Sample_ID">
           <label>{Sample_ID}</label>
         </input>
-        <input faims_attribute_name="Location from top of unit in cm" faims_attribute_type="measure" ref="Location_from_top_of_unit_in_cm">
+        <input faims_attribute_name="Location from top of unit in cm" faims_attribute_type="measure" ref="Location_from_top_of_unit_in_cm" faims_style_class="required">
           <label>{Location_from_top_of_unit__cm_}</label>
         </input>
         <input faims_attribute_name="Description of location" faims_attribute_type="measure" ref="Description_of_location">

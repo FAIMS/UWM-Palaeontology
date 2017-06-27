@@ -9,7 +9,9 @@
   </Login>
   <Control f="nodata">
     <Main f="noscroll">
-      <Create_New_Locality t="button" f="nocertainty noannotation" l="Column"/>
+      <Create_New_Locality t="button" f="nocertainty noannotation" l="Column">
+        Create New Locality (Column)
+      </Create_New_Locality>
       <Existing_Localities t="list" f="nocertainty noannotation" e="Column"/>
     </Main>
     <IDS>
@@ -23,7 +25,7 @@
       <author f="id nocertainty noannotation">
         <str>
           <pos>2</pos>
-          <fmt>$0- </fmt>
+          <fmt>$0-</fmt>
         </str>
       </author>
       <timestamp f="id nocertainty noannotation">
@@ -37,7 +39,7 @@
       <Locality_Abbreviated_Name f="id">
         <str>
           <pos>1</pos>
-          <fmt>$0- </fmt>
+          <fmt>$0-</fmt>
         </str>
       </Locality_Abbreviated_Name>
       <gps/>
@@ -62,7 +64,7 @@
       <Existing_Units t="list" f="nocertainty noannotation" ec="Unit"/>
     </Units>
   </Column>
-  <Unit>
+    <Unit>
     <Main>
       <author f="nocertainty noannotation"/>
       <timestamp f="nocertainty noannotation">
@@ -71,20 +73,20 @@
       <Locality_Abbreviated_Name f="id" i="Column/Description/Locality_Abbreviated_Name">
         <str>
           <pos>1</pos>
-          <fmt>$0- </fmt>
+          <fmt>$0-</fmt>
         </str>
       </Locality_Abbreviated_Name>
       <Unit_ID b="decimal" f="id autonum nocertainty noannotation">
         <str>
         <pos>2</pos>
-        <fmt>$0- </fmt>
+        <fmt>$0-</fmt>
         </str>
       </Unit_ID>
       <Starts_at_in_cm b="decimal" f="id">
         Starts at (cm)
         <str>
         <pos>3</pos>
-        <fmt>$0- </fmt>
+        <fmt>$0-</fmt>
         </str>
       </Starts_at_in_cm>
       <Ends_at_in_cm b="decimal" f="id">
@@ -201,7 +203,9 @@
     </Main>
     <Samples f="noscroll">
       <Create_New_Sample t="button" f="nocertainty noannotation" lc="Sample"/>
-      <Load_Sample t="button" f="nocertainty noannotation" lcq="Sample"/>
+      <Scan_And_Load_Sample t="button" f="nocertainty noannotation" lcq="Sample">
+        Scan &amp; Load Sample
+      </Scan_And_Load_Sample>
       <Existing_Samples t="list" f="nocertainty noannotation" ec="Sample"/>
     </Samples>
   </Unit>
@@ -211,28 +215,23 @@
       <timestamp f="nocertainty noannotation">
         Created at
       </timestamp>
-      <Locality_Abbreviated_Name f="id nocertainty noannotation" i="Unit/Main/Locality_Abbreviated_Name">
+      <Locality_Abbreviated_Name f="id nocertainty noannotation readonly" i="Unit/Main/Locality_Abbreviated_Name">
         <str>
           <pos>1</pos>
-          <fmt>$0- </fmt>
+          <fmt>$0-</fmt>
         </str>
       </Locality_Abbreviated_Name>
       <Unit_ID f="id" i="Unit/Main/Unit_ID">
         <str>
           <pos>2</pos>
-          <fmt>$0- </fmt>
+          <fmt>$0-</fmt>
         </str>
       </Unit_ID>
-      <Sample_ID b="decimal" f="id autonum">
-        <str>
-          <pos>3</pos>
-          <fmt>$0- </fmt>
-        </str>
-      </Sample_ID>
-      <Location_from_top_of_unit_in_cm b="decimal" f="id">
+      <Sample_ID b="decimal" f="autonum"/>
+      <Location_from_top_of_unit_in_cm b="decimal" f="id notnull">
         Location from top of unit (cm)
         <str>
-          <pos>4</pos>
+          <pos>3</pos>
           <fmt>$0</fmt>
         </str>
       </Location_from_top_of_unit_in_cm>
