@@ -47,7 +47,14 @@
                   <Search_Button/>
                 </Col_1>
               </Colgroup_0>
-              <Entity_Types/>
+              <Colgroup_1>
+                <Col_0>
+                  <Entity_Types/>
+                </Col_0>
+                <Col_1>
+                  <Select_Column/>
+                </Col_1>
+              </Colgroup_1>
               <Entity_List/>
             </Search>
           </Control>
@@ -113,7 +120,6 @@
             </Main>
             <Samples>
               <Create_New_Sample/>
-              <Scan_And_Load_Sample/>
               <Existing_Samples/>
             </Samples>
           </Unit>
@@ -130,6 +136,7 @@
               <Photo_of_Location_Button_1/>
               <Sample_Label/>
               <Sample_Tag/>
+              <Scan_Sample_Tag/>
             </Info>
           </Sample>
         </faims>
@@ -239,13 +246,29 @@
             </trigger>
           </group>
         </group>
-        <select1 ref="Entity_Types">
-          <label>{Entity_Types}</label>
-          <item>
-            <label>Options not loaded</label>
-            <value>Options not loaded</value>
-          </item>
-        </select1>
+        <group ref="Colgroup_1" faims_style="orientation">
+          <label/>
+          <group ref="Col_0" faims_style="even">
+            <label/>
+            <select1 ref="Entity_Types">
+              <label>{Entity_Types}</label>
+              <item>
+                <label>Options not loaded</label>
+                <value>Options not loaded</value>
+              </item>
+            </select1>
+          </group>
+          <group ref="Col_1" faims_style="even">
+            <label/>
+            <select1 ref="Select_Column">
+              <label>{Select_Column}</label>
+              <item>
+                <label>Options not loaded</label>
+                <value>Options not loaded</value>
+              </item>
+            </select1>
+          </group>
+        </group>
         <select1 appearance="compact" ref="Entity_List">
           <label>{Entity_List}</label>
           <item>
@@ -260,7 +283,7 @@
       <group ref="Description">
         <label>{Description}</label>
         <input faims_attribute_name="Column author" faims_attribute_type="measure" ref="Column_author" faims_read_only="true">
-          <label>{Column_author}</label>
+          <label>{Author}</label>
         </input>
         <input faims_attribute_name="Column timestamp" faims_attribute_type="measure" ref="Column_timestamp" faims_read_only="true">
           <label>{Created_at}</label>
@@ -446,9 +469,6 @@
         <trigger ref="Create_New_Sample">
           <label>{Create_New_Sample}</label>
         </trigger>
-        <trigger ref="Scan_And_Load_Sample">
-          <label>{Scan___Load_Sample}</label>
-        </trigger>
         <select1 appearance="compact" ref="Existing_Samples">
           <label>{Existing_Samples}</label>
           <item>
@@ -499,6 +519,9 @@
         <input faims_attribute_name="Sample Tag" faims_attribute_type="measure" ref="Sample_Tag">
           <label>{Sample_Tag}</label>
         </input>
+        <trigger ref="Scan_Sample_Tag">
+          <label>{Scan_Sample_Tag}</label>
+        </trigger>
       </group>
     </group>
   </h:body>

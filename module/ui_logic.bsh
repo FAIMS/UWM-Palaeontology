@@ -201,7 +201,6 @@ REF_TO_TYPE.put("Unit/Main/Interpretation", "input");
 REF_TO_TYPE.put("Unit/Main/Unit_Photo", "camera");
 REF_TO_TYPE.put("Unit/Main/Unit_Photo_Button_1", "button");
 REF_TO_TYPE.put("Unit/Samples/Create_New_Sample", "button");
-REF_TO_TYPE.put("Unit/Samples/Scan_And_Load_Sample", "button");
 REF_TO_TYPE.put("Unit/Samples/Existing_Samples", "list");
 REF_TO_TYPE.put("Sample/Info/Sample_author", "input");
 REF_TO_TYPE.put("Sample/Info/Sample_timestamp", "input");
@@ -214,6 +213,7 @@ REF_TO_TYPE.put("Sample/Info/Photo_of_Location", "camera");
 REF_TO_TYPE.put("Sample/Info/Photo_of_Location_Button_1", "button");
 REF_TO_TYPE.put("Sample/Info/Sample_Label", "input");
 REF_TO_TYPE.put("Sample/Info/Sample_Tag", "input");
+REF_TO_TYPE.put("Sample/Info/Scan_Sample_Tag", "button");
 
 DATA_REFS.add("Column/Description/Column_author");
 DATA_REFS.add("Column/Description/Column_timestamp");
@@ -1065,7 +1065,7 @@ void timedPopulateCursorList(String ref, String q, int limit) {
 }
 
 void setUpTypeHierarchy() {
-  //- 
+  //-
   //  - Column
   //    - Unit
   //      - Sample
@@ -2912,13 +2912,13 @@ void newColumn(String parent){
     parentTabgroup   = parent;
     parentTabgroup__ = parent;
   }
-  
+
 
   setUuid(tabgroup, null);
   newTabGroup(tabgroup);
   populateAuthorAndTimestamp(tabgroup);
   populateEntityListsInTabGroup(tabgroup);
-  
+
 
   executeOnEvent(tabgroup, "create");
 }
@@ -2981,7 +2981,7 @@ void duplicateColumn(){
   String uuidOld = getUuid(tabgroup);
   setUuid(tabgroup, "");
   disableAutoSave(tabgroup);
-  
+
   clearGpsInTabGroup(tabgroup);
   populateAuthorAndTimestamp(tabgroup);
   populateEntityListsInTabGroup(tabgroup);
@@ -3373,7 +3373,7 @@ void loadOrCreateEntityFromScannedAttrib(
   loadEntityFrom(uuidString);
 }
 
-bindQrScanning("Unit/Samples/Scan_And_Load_Sample", "Sample", true);
+
 
 /******************************************************************************/
 /*                       AUTONUMBERING HELPER FUNCTIONS                       */
@@ -3586,7 +3586,92 @@ addOnEvent("Unit/Samples/Existing_Samples", "click", "loadEntity()");
 /******************************************************************************/
 /*                             HANDWRITTEN LOGIC                              */
 /******************************************************************************/
+/****************************** SEARCH EXTENSION ******************************/
+/* Implements an extension to the search page which allows users to           */
+/* constrain their searches by user.                                          */
+/******************************************************************************/
+//delOnEvent("Control/Search", "show", "search()");
+addOnEvent("Control/Search", "show", "populateColumn()");
+addOnEvent("Control/Search/Select_Column", "click", "customSearch()");
 
+void populateColumn() {
+  String refColumn = "Control/Search/Select_Column";
+
+  String q = "";
+  q += " SELECT uuid, response, attributename, measure";
+  q += "   FROM latestNonDeletedAentvalue";
+  q += "   JOIN latestNonDeletedArchEntFormattedIdentifiers USING (uuid)";
+  q += "   JOIN attributekey USING (attributeid)";
+  q += "  WHERE attributename = 'Locality Name'";
+
+  FetchCallback popColumn = new FetchCallback() {
+    onFetch(result) {
+      populateDropDown(refColumn, result);
+    }
+  };
+
+  fetchAll(q, popColumn);
+}
+void customSearch(){
+  String tabgroup = "Control";
+  String refEntityList  = tabgroup + "/Search/Entity_List";
+  String refSearchTerm  = tabgroup + "/Search/Search_Term";
+  String refEntityTypes = tabgroup + "/Search/Entity_Types";
+  String refSelectColumn  = tabgroup + "/Search/Select_Column";
+
+  String type = getFieldValue(refEntityTypes);
+  String term = getFieldValue(refSearchTerm);
+  String name = getFieldValue(refSelectColumn);
+  System.out.println(name);
+  /*
+  String searchQuery =  "SELECT uuid, response " +
+                        " FROM latestnondeletedarchentformattedidentifiers  " +
+                        "WHERE uuid IN (SELECT childuuid" +
+                        " FROM parentchild  " +
+                        "WHERE parentuuid = {name}  " +
+                        "UNION  " +
+                        "SELECT b.childuuid" +
+                        " FROM parentchild a  " +
+                        "JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                        "WHERE a.parentuuid = {name})";
+
+searchQuery = replaceFirst(searchQuery, "{name}", name);
+searchQuery = replaceFirst(searchQuery, "{name}", name);
+*/
+String searchQuery =  "SELECT uuid, response " +
+                      " FROM latestnondeletedarchentformattedidentifiers  " +
+                      "WHERE uuid IN (SELECT childuuid" +
+                      " FROM parentchild  " +
+                      "WHERE parentuuid = 1000011499064103245 " +
+                      "UNION  " +
+                      "SELECT b.childuuid" +
+                      " FROM parentchild a  " +
+                      "JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                      "WHERE a.parentuuid = 1000011499064103245)";
+populateCursorList(refEntityList, searchQuery, 25);
+refreshTabgroupCSS(tabgroup);
+
+  Log.d("Module", "Search query: " + searchQuery);
+}
+/****************************** Scan Sample Tag ******************************/
+/* Implements logic to scan a value and write value into Sample tag field    */
+/******************************************************************************/
+void bindButtonAsQrScannerToField(String refButton, String refField){
+  String event = "click";
+  String stmt = fun2str("scanSampleTag", refField);
+  addOnEvent(refButton, event, stmt);
+}
+void scanSampleTag(String ref) {
+  String callback = fun2str("loadScanValueToField", ref);
+  scanCode(callback);
+}
+void loadScanValueToField(String ref){
+  String newCode = getLastScanContents();
+  setFieldValue(ref, newCode);
+}
+addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
+
+//bindButtonAsQrScannerToField("Sample/Info/Scan_Sample_Tag", "Sample/Info/Sample_Tag")
 
 /******************************************************************************/
 /*                                    INIT                                    */

@@ -1,0 +1,19 @@
+/****************************** Scan Sample Tag ******************************/
+/* Implements logic to scan a value and write value into Sample tag field    */
+/******************************************************************************/
+void bindButtonAsQrScannerToField(String refButton, String refField){
+  String event = "click";
+  String stmt = fun2str("scanSampleTag", refField);
+  addOnEvent(refButton, event, stmt);
+}
+void scanSampleTag(String ref) {
+  String callback = fun2str("loadScanValueToField", ref);
+  scanCode(callback);
+}
+void loadScanValueToField(String ref){
+  String newCode = getLastScanContents();
+  setFieldValue(ref, newCode);
+}
+//addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
+
+//bindButtonAsQrScannerToField("Sample/Info/Scan_Sample_Tag", "Sample/Info/Sample_Tag")
