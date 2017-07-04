@@ -20,7 +20,7 @@ void populateColumn() {
       List l = new ArrayList();
       List all = new ArrayList();
       all.add("");
-      all.add("All");
+      all.add("{All}");
       all.add("");
       all.add("");
 

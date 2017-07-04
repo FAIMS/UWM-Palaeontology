@@ -14,6 +14,6 @@ void loadScanValueToField(String ref){
   String newCode = getLastScanContents();
   setFieldValue(ref, newCode);
 }
-//addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
+addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
 
 //bindButtonAsQrScannerToField("Sample/Info/Scan_Sample_Tag", "Sample/Info/Sample_Tag")

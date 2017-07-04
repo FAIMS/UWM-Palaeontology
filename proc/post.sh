@@ -50,6 +50,7 @@ replacement="
 perl -0777 -i.original -pe "s/$string/$replacement/igs" ui_schema.xml
 
 cat << EOF >> english.0.properties
+All=All
 Select_Column=Select Column
 EOF
 rm ui_schema.xml.original

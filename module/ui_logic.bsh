@@ -3586,6 +3586,7 @@ addOnEvent("Unit/Samples/Existing_Samples", "click", "loadEntity()");
 /******************************************************************************/
 /*                             HANDWRITTEN LOGIC                              */
 /******************************************************************************/
+
 /****************************** SEARCH EXTENSION ******************************/
 /* Implements an extension to the search page which allows users to           */
 /* constrain their searches by user.                                          */
@@ -3608,7 +3609,7 @@ void populateColumn() {
       List l = new ArrayList();
       List all = new ArrayList();
       all.add("");
-      all.add("All");
+      all.add("{All}");
       all.add("");
       all.add("");
 
@@ -3688,6 +3689,7 @@ void loadScanValueToField(String ref){
 addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
 
 //bindButtonAsQrScannerToField("Sample/Info/Scan_Sample_Tag", "Sample/Info/Sample_Tag")
+
 
 /******************************************************************************/
 /*                                    INIT                                    */
