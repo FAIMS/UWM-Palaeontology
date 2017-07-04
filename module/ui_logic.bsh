@@ -3590,9 +3590,8 @@ addOnEvent("Unit/Samples/Existing_Samples", "click", "loadEntity()");
 /* Implements an extension to the search page which allows users to           */
 /* constrain their searches by user.                                          */
 /******************************************************************************/
-//delOnEvent("Control/Search", "show", "search()");
 addOnEvent("Control/Search", "show", "populateColumn()");
-addOnEvent("Control/Search/Select_Column", "click", "customSearch()");
+addOnEvent("Control/Search/Select_Column", "click", "search()");
 
 void populateColumn() {
   String refColumn = "Control/Search/Select_Column";
@@ -3606,48 +3605,65 @@ void populateColumn() {
 
   FetchCallback popColumn = new FetchCallback() {
     onFetch(result) {
-      populateDropDown(refColumn, result);
+      List l = new ArrayList();
+      List all = new ArrayList();
+      all.add("");
+      all.add("All");
+      all.add("");
+      all.add("");
+
+      l.add(all);
+      l.addAll(result);
+      populateDropDown(refColumn, l);
     }
   };
 
   fetchAll(q, popColumn);
 }
-void customSearch(){
+
+void search(){
   String tabgroup = "Control";
   String refEntityList  = tabgroup + "/Search/Entity_List";
   String refSearchTerm  = tabgroup + "/Search/Search_Term";
   String refEntityTypes = tabgroup + "/Search/Entity_Types";
   String refSelectColumn  = tabgroup + "/Search/Select_Column";
-
   String type = getFieldValue(refEntityTypes);
   String term = getFieldValue(refSearchTerm);
   String name = getFieldValue(refSelectColumn);
-  System.out.println(name);
-  /*
-  String searchQuery =  "SELECT uuid, response " +
-                        " FROM latestnondeletedarchentformattedidentifiers  " +
-                        "WHERE uuid IN (SELECT childuuid" +
-                        " FROM parentchild  " +
-                        "WHERE parentuuid = {name}  " +
-                        "UNION  " +
-                        "SELECT b.childuuid" +
-                        " FROM parentchild a  " +
-                        "JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
-                        "WHERE a.parentuuid = {name})";
-
-searchQuery = replaceFirst(searchQuery, "{name}", name);
-searchQuery = replaceFirst(searchQuery, "{name}", name);
-*/
-String searchQuery =  "SELECT uuid, response " +
-                      " FROM latestnondeletedarchentformattedidentifiers  " +
-                      "WHERE uuid IN (SELECT childuuid" +
-                      " FROM parentchild  " +
-                      "WHERE parentuuid = 1000011499064103245 " +
-                      "UNION  " +
-                      "SELECT b.childuuid" +
-                      " FROM parentchild a  " +
-                      "JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
-                      "WHERE a.parentuuid = 1000011499064103245)";
+  String searchQuery = "";
+  if(name == null || name == "") {
+    searchQuery = "SELECT uuid, response "+
+                         "  FROM latestNonDeletedArchEntFormattedIdentifiers  "+
+                         " WHERE uuid in (SELECT uuid "+
+                         "                  FROM latestNonDeletedArchEntIdentifiers "+
+                         "                 WHERE measure LIKE {term}||'%'  "+
+                         "                   AND ( aenttypename = {type} OR '' = {type} ) "+
+                         "                )  "+
+                         " ORDER BY response "+
+                         " LIMIT ? "+
+                         "OFFSET ? ";
+    searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
+    searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
+    searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
+  } else {
+      searchQuery =  "SELECT uuid, response " +
+                            " FROM latestnondeletedarchentformattedidentifiers  " +
+                            "WHERE uuid IN (SELECT childuuid" +
+                            "                  FROM parentchild  " +
+                            "               WHERE parentuuid = {name}  " +
+                            "               UNION  " +
+                            "               SELECT b.childuuid" +
+                            "                FROM parentchild a  " +
+                            "               JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                            "               WHERE a.parentuuid = {name}) AND ( aenttypename LIKE '{type}' OR '' = '{type}' ) "+
+                            " ORDER BY response "+
+                            " LIMIT ? "+
+                            " OFFSET ? ";
+      searchQuery = replaceFirst(searchQuery, "{name}", name);
+      searchQuery = replaceFirst(searchQuery, "{name}", name);
+      searchQuery = replaceFirst(searchQuery, "{type}", type);
+      searchQuery = replaceFirst(searchQuery, "{type}", type);
+  }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);
 
