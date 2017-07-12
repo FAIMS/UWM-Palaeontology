@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: 5db20e25d74a6a2e4dc8f7fa389bae5b5a93b22c
+ * GENERATED WITH FAIMS-TOOLS, SHA1: ede772000c2e9d8de95a03ec36ee2977ca906dfc
  */
 import android.util.Log;
 import android.os.Build.MODEL;
@@ -156,7 +156,6 @@ REF_TO_TYPE.put("Control/Main/Existing_Localities", "list");
 REF_TO_TYPE.put("Control/IDS/Next_Unit_ID", "input");
 REF_TO_TYPE.put("Control/IDS/Next_Sample_ID", "input");
 REF_TO_TYPE.put("Control/Map/Map", "map");
-REF_TO_TYPE.put("Control/Search", "group");
 REF_TO_TYPE.put("Control/Search/Search_Term", "input");
 REF_TO_TYPE.put("Control/Search/Search_Button", "button");
 REF_TO_TYPE.put("Control/Search/Entity_Types", "dropdown");
@@ -165,10 +164,8 @@ REF_TO_TYPE.put("Column/Description/Column_author", "input");
 REF_TO_TYPE.put("Column/Description/Column_timestamp", "input");
 REF_TO_TYPE.put("Column/Description/Locality_Name", "input");
 REF_TO_TYPE.put("Column/Description/Locality_Abbreviated_Name", "input");
-REF_TO_TYPE.put("Column/Description", "group");
 REF_TO_TYPE.put("Column/Description/Latitude", "input");
 REF_TO_TYPE.put("Column/Description/Longitude", "input");
-REF_TO_TYPE.put("Column/Description", "group");
 REF_TO_TYPE.put("Column/Description/Northing", "input");
 REF_TO_TYPE.put("Column/Description/Easting", "input");
 REF_TO_TYPE.put("Column/Description/Accuracy", "input");
@@ -214,6 +211,16 @@ REF_TO_TYPE.put("Sample/Info/Photo_of_Location_Button_1", "button");
 REF_TO_TYPE.put("Sample/Info/Sample_Label", "input");
 REF_TO_TYPE.put("Sample/Info/Sample_Tag", "input");
 REF_TO_TYPE.put("Sample/Info/Scan_Sample_Tag", "button");
+REF_TO_TYPE.put("Login/Login", "tab");
+REF_TO_TYPE.put("Control/Main", "tab");
+REF_TO_TYPE.put("Control/IDS", "tab");
+REF_TO_TYPE.put("Control/Map", "tab");
+REF_TO_TYPE.put("Control/Search", "tab");
+REF_TO_TYPE.put("Column/Description", "tab");
+REF_TO_TYPE.put("Column/Units", "tab");
+REF_TO_TYPE.put("Unit/Main", "tab");
+REF_TO_TYPE.put("Unit/Samples", "tab");
+REF_TO_TYPE.put("Sample/Info", "tab");
 
 DATA_REFS.add("Column/Description/Column_author");
 DATA_REFS.add("Column/Description/Column_timestamp");
@@ -557,9 +564,15 @@ String getArchEntTypePascalCased(String ref) {
 /*         first time the tab group is saved as well as subsequent            */
 /*         onSave(String, Boolean) calls.                                     */
 /*                                                                            */
-/* A single call to `bindOnEvents` must occur after all the `addOnEvent` and  */
-/* `delOnEvents` calls. Calling `bindOnEvents` is what actually establishes   */
-/* the bindings once they have been added to the accumulator.                 */
+/* Additionally, the binding accumulator augments the "load" event so that    */
+/* the `statement` in addOnEvent("module", "load", statement) gets executed   */
+/* after the module has finished loading. (That is, when this script has been */
+/* loaded, including the execution of any asynchronous functions.)            */
+/*                                                                            */
+/* Importantly, a single call to `bindOnEvents` must occur after all the      */
+/* `addOnEvent` and `delOnEvents` calls. Calling `bindOnEvents` is what       */
+/* actually establishes the bindings once they have been added to the         */
+/* accumulator.                                                               */
 /******************************************************************************/
 // This counts the number of _a_synchonrous jobs before the module is considered
 // to be loaded.
@@ -1537,8 +1550,10 @@ void setUpPerfActionBarItems() {
   removeActionBarItem("enable_record_creation");
 
   String userMenuTabGroup = getTabGroupRef(USER_MENU_PATH);
-  if (!isDisplayed(userMenuTabGroup))
+  if (!isDisplayed(userMenuTabGroup)) {
+    PERF_ALLOW_CREATION = false;
     return;
+  }
   if (!isInPerfTestTime())
     return;
 
@@ -1731,21 +1746,29 @@ void persistOverSessions(String ref) {
 /*                                                                            */
 /* Provides an easy way to copy field values, even between vocabs.            */
 /******************************************************************************/
+boolean isSelected(String ref, String vocabName) {
+  String vocabNameActual = getMenuValue(ref);
+
+  if (vocabNameActual == null)
+    return vocabNameActual == vocabName;
+  else
+    return vocabNameActual.equals(vocabName);
+}
+
 boolean setMenuValue(String ref, String vocabName) {
   String attrName = getAttributeName(ref);
   String vocabId = getVocabId(attrName, vocabName);
 
   if (isNull(vocabId))
     return false;
-  else {
-    setFieldValue(ref, vocabId);
-    return true;
-  }
+
+  setFieldValue(ref, vocabId);
+  return isSelected(ref, vocabName);
 }
 
-void copyFieldValue(String src, String dst) {
+boolean copyFieldValue(String src, String dst) {
   Boolean doFindVocabId = true;
-  copyFieldValue(src, dst, doFindVocabId);
+  return copyFieldValue(src, dst, doFindVocabId);
 }
 
 /* `src`           The ref of the source field.
@@ -1760,7 +1783,7 @@ void copyFieldValue(String src, String dst) {
  *                 If `doFindVocabId` is false, the value returned by
  *                 `getFieldValue` is copied, without any database accesses.
  */
-void copyFieldValue(String src, String dst, Boolean doFindVocabId) {
+boolean copyFieldValue(String src, String dst, Boolean doFindVocabId) {
   String vocabIdSrc   = getFieldValue(src);
   String vocabNameSrc = getFieldValue(src, true);
 
@@ -1769,22 +1792,15 @@ void copyFieldValue(String src, String dst, Boolean doFindVocabId) {
 
   if (attrNameSrc.equals(attrNameDst) || !doFindVocabId) {
     setFieldValue(dst, vocabIdSrc);
-    return;
+    return true;
   }
 
-  if (!setMenuValue(dst, vocabNameSrc)) {
-    // Fall back to dumb field copying
-    copyFieldValue(src, dst, false);
-  }
-}
+  if (setMenuValue(dst, vocabNameSrc))
+    return true;
 
-boolean isSelected(String ref, String vocabName) {
-  String vocabNameActual = getMenuValue(ref);
-
-  if (vocabNameActual == null)
-    return vocabNameActual == vocabName;
-  else
-    return vocabNameActual.equals(vocabName);
+  // Fall back to dumb field copying
+  copyFieldValue(src, dst, false);
+  return false;
 }
 
 void clearField(String ref) {
@@ -1795,6 +1811,16 @@ void clearField(String ref) {
   }
 }
 
+/* Copies the value from the field at `src` to the field at `dst` whenever the
+ * a new record containing `dst` is created.
+ *
+ * `doCheckParent` If this is true, the value is only copied when the parent tab
+ *                 group of the tab group referred to by `dst` is equal to the
+ *                 tab group referred to by `src`. This is a way of checking
+ *                 whether the field referred to by `src` has been loaded.
+ * `doFindVocabId` Same as the `doFindVocabId` argument for the `copyFieldValue`
+ *                 function.
+ */
 void inheritFieldValue(
     String src,
     String dst,
@@ -2328,7 +2354,7 @@ String getUserMenuValue(int i) {
 }
 
 void resetUser() {
-  userId   = "0";
+  userId   = "";
   username = "";
   User user = new User(userId, "", "", "", "");
   setUser(user);
@@ -2582,32 +2608,32 @@ addOnEvent("Sample", "show", "onShowSample()");
 
 
 
-void onClickControlMainCreateNewLocality () {
+void onClickControlCreateNewLocality () {
   parentTabgroup__ = "Control";
   newColumn();
 }
 
-void onValidClickLoginLoginLogin () {
+void onValidClickLoginLogin () {
   newTab("Control", true);
 }
 
 
 
-void onClickLoginLoginLogin () {
-  showVerifyUserDialog("onValidClickLoginLoginLogin()");
+void onClickLoginLogin () {
+  showVerifyUserDialog("onValidClickLoginLogin()");
 }
 
-void onClickColumnUnitsCreateNewUnit () {
+void onClickColumnCreateNewUnit () {
   newUnit("Column");
 }
 
-void onClickUnitSamplesCreateNewSample () {
+void onClickUnitCreateNewSample () {
   newSample("Unit");
 }
-addOnEvent("Control/Main/Create_New_Locality", "click", "onClickControlMainCreateNewLocality()");
-addOnEvent("Login/Login/Log_in", "click", "onClickLoginLoginLogin()");
-addOnEvent("Column/Units/Create_New_Unit", "click", "onClickColumnUnitsCreateNewUnit()");
-addOnEvent("Unit/Samples/Create_New_Sample", "click", "onClickUnitSamplesCreateNewSample()");
+addOnEvent("Control/Main/Create_New_Locality", "click", "onClickControlCreateNewLocality()");
+addOnEvent("Login/Login/Log_in", "click", "onClickLoginLogin()");
+addOnEvent("Column/Units/Create_New_Unit", "click", "onClickColumnCreateNewUnit()");
+addOnEvent("Unit/Samples/Create_New_Sample", "click", "onClickUnitCreateNewSample()");
 
 /******************************************************************************/
 /*                   AUDIO, CAMERA, FILE AND VIDEO BINDINGS                   */
@@ -3589,7 +3615,7 @@ addOnEvent("Unit/Samples/Existing_Samples", "click", "loadEntity()");
 
 /****************************** SEARCH EXTENSION ******************************/
 /* Implements an extension to the search page which allows users to           */
-/* constrain their searches by user.                                          */
+/* constrain their searches by existing column                                */
 /******************************************************************************/
 addOnEvent("Control/Search", "show", "populateColumn()");
 addOnEvent("Control/Search/Select_Column", "click", "search()");
@@ -3656,14 +3682,19 @@ void search(){
                             "               SELECT b.childuuid" +
                             "                FROM parentchild a  " +
                             "               JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
-                            "               WHERE a.parentuuid = {name}) AND ( aenttypename LIKE '{type}' OR '' = '{type}' ) "+
+                            "               WHERE a.parentuuid = {name} " +
+                            "               UNION " +
+                            "               SELECT uuid FROM latestnondeletedarchentformattedidentifiers WHERE uuid = {name})"+
+                            " AND ( aenttypename LIKE '{type}' OR '' = '{type}' )"+
                             " ORDER BY response "+
                             " LIMIT ? "+
                             " OFFSET ? ";
       searchQuery = replaceFirst(searchQuery, "{name}", name);
       searchQuery = replaceFirst(searchQuery, "{name}", name);
+      searchQuery = replaceFirst(searchQuery, "{name}", name);
       searchQuery = replaceFirst(searchQuery, "{type}", type);
       searchQuery = replaceFirst(searchQuery, "{type}", type);
+
   }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);
@@ -3672,12 +3703,7 @@ refreshTabgroupCSS(tabgroup);
 }
 /****************************** Scan Sample Tag ******************************/
 /* Implements logic to scan a value and write value into Sample tag field    */
-/******************************************************************************/
-void bindButtonAsQrScannerToField(String refButton, String refField){
-  String event = "click";
-  String stmt = fun2str("scanSampleTag", refField);
-  addOnEvent(refButton, event, stmt);
-}
+/*****************************************************************************/
 void scanSampleTag(String ref) {
   String callback = fun2str("loadScanValueToField", ref);
   scanCode(callback);
@@ -3687,8 +3713,6 @@ void loadScanValueToField(String ref){
   setFieldValue(ref, newCode);
 }
 addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
-
-//bindButtonAsQrScannerToField("Sample/Info/Scan_Sample_Tag", "Sample/Info/Sample_Tag")
 
 
 /******************************************************************************/
