@@ -58,28 +58,39 @@ void search(){
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
   } else {
-    searchQuery =  "SELECT uuid, response " +
-                          " FROM latestnondeletedarchentformattedidentifiers  " +
-                          "WHERE uuid IN (SELECT childuuid" +
-                          "                  FROM parentchild  " +
-                          "               WHERE parentuuid = {name}  " +
-                          "               UNION  " +
-                          "               SELECT b.childuuid" +
-                          "                FROM parentchild a  " +
-                          "               JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
-                          "               WHERE a.parentuuid = {name} " +
-                          "               UNION " +
-                          "               SELECT uuid FROM latestnondeletedarchentformattedidentifiers WHERE uuid = {name})"+
-                          " AND ( aenttypename LIKE '{type}' OR '' = '{type}' )"+
-                          " ORDER BY response "+
-                          " LIMIT ? "+
-                          " OFFSET ? ";
-      searchQuery = replaceFirst(searchQuery, "{name}", name);
-      searchQuery = replaceFirst(searchQuery, "{name}", name);
-      searchQuery = replaceFirst(searchQuery, "{name}", name);
-      searchQuery = replaceFirst(searchQuery, "{type}", type);
-      searchQuery = replaceFirst(searchQuery, "{type}", type);
-
+    searchQuery = "  SELECT uuid, response " +
+                         "    FROM latestNonDeletedArchEntFormattedIdentifiers  " +
+                         "  WHERE uuid in (SELECT uuid " +
+                         "                  FROM latestNonDeletedArchEntIdentifiers " +
+                         "                 WHERE measure LIKE {term}||'%'  " +
+                         "                   AND ( aenttypename = {type} OR '' = {type} ) " +
+                         "                )  " +
+                         "    AND ( " +
+                         "        ('{name}' = '\\0') OR " +
+                         "        uuid IN ( SELECT childuuid " +
+                         "                    FROM parentchild  " +
+                         "                  WHERE parentuuid = {name}  " +
+                         "                  UNION  " +
+                         "                  SELECT b.childuuid" +
+                         "                    FROM parentchild a  " +
+                         "                  JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                         "                  WHERE a.parentuuid = {name} " +
+                         "                  UNION " +
+                         "                  SELECT uuid " +
+                         "                    FROM latestnondeletedarchentformattedidentifiers " +
+                         "                  WHERE uuid = {name}" +
+                         "                  )" +
+                         "        )" +
+                         "  ORDER BY response "+
+                         "  LIMIT ? " +
+                         "  OFFSET ? ";
+     searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
+     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
+     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
   }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);
