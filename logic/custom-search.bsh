@@ -43,6 +43,7 @@ void search(){
   String term = getFieldValue(refSearchTerm);
   String name = getFieldValue(refSelectColumn);
   String searchQuery = "";
+  //name is null for initial setup so do default search, name is empty if the 'All' option is chosen in the Select_Column field
   if(name == null || name == "") {
     searchQuery = "SELECT uuid, response "+
                          "  FROM latestNonDeletedArchEntFormattedIdentifiers  "+
@@ -58,6 +59,7 @@ void search(){
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
   } else {
+    //Filter according to chosen Column, entity type and search term
     searchQuery = "  SELECT uuid, response " +
                          "    FROM latestNonDeletedArchEntFormattedIdentifiers  " +
                          "  WHERE uuid in (SELECT uuid " +
