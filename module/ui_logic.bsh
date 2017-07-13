@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: ede772000c2e9d8de95a03ec36ee2977ca906dfc
+ * GENERATED WITH FAIMS-TOOLS, SHA1: f9b420b59b5ebd166d37474868b228c85ea33514
  */
 import android.util.Log;
 import android.os.Build.MODEL;
@@ -497,13 +497,20 @@ String getArch16nKey(String ref) {
 }
 
 String guessArch16nVal(String ref) {
-  String arch16nKey = getArch16nKey(ref);
+  return guessArch16nValFromRef(ref);
+}
 
-  if (isNull(arch16nKey)) return "";
-  arch16nKey = arch16nKey.replaceAll("_", " ");
-  arch16nKey = arch16nKey.replaceAll("^\\{", "");
-  arch16nKey = arch16nKey.replaceAll("\\}$", "");
-  return arch16nKey;
+String guessArch16nValFromRef(String ref) {
+  String arch16nKey = getArch16nKey(ref);
+  return guessArch16nValFromKey(arch16nKey);
+}
+
+String guessArch16nValFromKey(String key) {
+  if (isNull(key)) return "";
+  key = key.replaceAll("_", " ");
+  key = key.replaceAll("^\\{", "");
+  key = key.replaceAll("\\}$", "");
+  return key;
 }
 
 String getAttributeName(String ref) {
@@ -1078,7 +1085,7 @@ void timedPopulateCursorList(String ref, String q, int limit) {
 }
 
 void setUpTypeHierarchy() {
-  //-
+  //- 
   //  - Column
   //    - Unit
   //      - Sample
@@ -1309,9 +1316,12 @@ void enqueueTestFiles(String cb) {
 void enqueueTestFiles(int numFiles, String cb) {
   if (isNull(PERF_TEST_IMG)) {
     String head; String body;
-    head  = "Could Not Enqueue Test Files";
+    head  = "Record Creation Aborted";
     body  = "The master file from which test files are enqueued could not be ";
-    body += "found on disk.";
+    body += "found on disk. Record creation cannot take place unless this file";
+    body += " is present. Please ensure that your device is connected to the ";
+    body += "internet, re-load the module, and try to run a create dummy ";
+    body += "records again.";
     showWarning(head, body);
     return;
   }
@@ -1354,7 +1364,7 @@ PerfImageDownloader() {
     String filStr = "/sdcard/faims/modules/" + getModuleId() +
         "/files/app/test.jpg";
     String urlStr = "https://raw.githubusercontent.com/FAIMS/FAIMS-Tools/" +
-        "autogen-py/test-images/construction-2894x1924.jpg";
+        "master/test-images/construction-2894x1924.jpg";
 
     if (detectFile(filStr))
       return;
@@ -1906,6 +1916,28 @@ for (entry : REF_TO_TYPE.entrySet()) {
 /******************************************************************************/
 /*                              MENU POPULATION                               */
 /******************************************************************************/
+/* Deprecated: Fetches the contents of a specifed vocabulary and stores it in
+ * the given list.
+ */
+void fetchVocab(String vocabName, List storageList) {
+  fetchVocab(vocabName, storageList, null);
+}
+
+void fetchVocab(String vocabName, List storageList, String callbackFunction) {
+  fetchAll("select vocabid, vocabname from vocabulary left join attributekey using (attributeid) where attributename = '" + vocabName + "';", new FetchCallback() {
+    onFetch(result) {
+      if (isNull(result))
+        result = new ArrayList();
+
+      storageList.addAll(result);
+      Log.d("fetchVocab()", "Fetched vocabulary \"" + vocabname + "\" contents: " + result.toString());
+      if (callbackFunction != null && !isNull(callbackFunction)) {
+        execute(callbackFunction);
+      }
+    }
+  });
+}
+
 /** Wrapper for to make a vocab without an exlusion list **/
 String getMakeVocabType(String ref) {
   if (isHier(ref)) return "hierarchical" + getType(ref);
@@ -2938,13 +2970,13 @@ void newColumn(String parent){
     parentTabgroup   = parent;
     parentTabgroup__ = parent;
   }
-
+  
 
   setUuid(tabgroup, null);
   newTabGroup(tabgroup);
   populateAuthorAndTimestamp(tabgroup);
   populateEntityListsInTabGroup(tabgroup);
-
+  
 
   executeOnEvent(tabgroup, "create");
 }
@@ -3007,7 +3039,7 @@ void duplicateColumn(){
   String uuidOld = getUuid(tabgroup);
   setUuid(tabgroup, "");
   disableAutoSave(tabgroup);
-
+  
   clearGpsInTabGroup(tabgroup);
   populateAuthorAndTimestamp(tabgroup);
   populateEntityListsInTabGroup(tabgroup);
@@ -3673,22 +3705,54 @@ void search(){
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
   } else {
-      searchQuery =  "SELECT uuid, response " +
-                            " FROM latestnondeletedarchentformattedidentifiers  " +
-                            "WHERE uuid IN (SELECT childuuid" +
-                            "                  FROM parentchild  " +
-                            "               WHERE parentuuid = {name}  " +
-                            "               UNION  " +
-                            "               SELECT b.childuuid" +
-                            "                FROM parentchild a  " +
-                            "               JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
-                            "               WHERE a.parentuuid = {name} " +
-                            "               UNION " +
-                            "               SELECT uuid FROM latestnondeletedarchentformattedidentifiers WHERE uuid = {name})"+
-                            " AND ( aenttypename LIKE '{type}' OR '' = '{type}' )"+
-                            " ORDER BY response "+
-                            " LIMIT ? "+
-                            " OFFSET ? ";
+    /*
+    searchQuery = "SELECT uuid, response "+
+                         "  FROM latestNonDeletedArchEntFormattedIdentifiers  "+
+                         " WHERE uuid in (SELECT uuid "+
+                         "                  FROM latestNonDeletedArchEntIdentifiers "+
+                         "                 WHERE measure LIKE {term}||'%'  "+
+                         "                   AND ( aenttypename = {type} OR '' = {type} ) "+
+                         "                )  "+
+                         "  AND ( "+
+                         "      ('{name}' = '\\0') OR " +
+                         "        uuid IN (SELECT childuuid " +
+                         "                  FROM parentchild  " +
+                         "               WHERE parentuuid = {name}  " +
+                         "               UNION  " +
+                         "               SELECT b.childuuid" +
+                         "                FROM parentchild a  " +
+                         "               JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                         "               WHERE a.parentuuid = {name} " +
+                         "               UNION " +
+                         "               SELECT uuid FROM latestnondeletedarchentformattedidentifiers WHERE uuid = {name}))"+
+                         " ORDER BY response "+
+                         " LIMIT ? "+
+                         "OFFSET ? ";
+     searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
+     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
+     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     */
+
+    searchQuery =  "SELECT uuid, response " +
+                          " FROM latestnondeletedarchentformattedidentifiers  " +
+                          "WHERE uuid IN (SELECT childuuid" +
+                          "                  FROM parentchild  " +
+                          "               WHERE parentuuid = {name}  " +
+                          "               UNION  " +
+                          "               SELECT b.childuuid" +
+                          "                FROM parentchild a  " +
+                          "               JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                          "               WHERE a.parentuuid = {name} " +
+                          "               UNION " +
+                          "               SELECT uuid FROM latestnondeletedarchentformattedidentifiers WHERE uuid = {name})"+
+                          " AND ( aenttypename LIKE '{type}' OR '' = '{type}' )"+
+                          " ORDER BY response "+
+                          " LIMIT ? "+
+                          " OFFSET ? ";
       searchQuery = replaceFirst(searchQuery, "{name}", name);
       searchQuery = replaceFirst(searchQuery, "{name}", name);
       searchQuery = replaceFirst(searchQuery, "{name}", name);
@@ -3713,7 +3777,7 @@ void loadScanValueToField(String ref){
   setFieldValue(ref, newCode);
 }
 addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
-
+  
 
 /******************************************************************************/
 /*                                    INIT                                    */

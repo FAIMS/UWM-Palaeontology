@@ -76,8 +76,10 @@ void search(){
                           " OFFSET ? ";
       searchQuery = replaceFirst(searchQuery, "{name}", name);
       searchQuery = replaceFirst(searchQuery, "{name}", name);
+      searchQuery = replaceFirst(searchQuery, "{name}", name);
       searchQuery = replaceFirst(searchQuery, "{type}", type);
       searchQuery = replaceFirst(searchQuery, "{type}", type);
+
   }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);
