@@ -104,8 +104,8 @@ void search(){
      searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
      searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
   }
-populateCursorList(refEntityList, searchQuery, 25);
-refreshTabgroupCSS(tabgroup);
+  populateCursorList(refEntityList, searchQuery, 25);
+  refreshTabgroupCSS(tabgroup);
 
   Log.d("Module", "Search query: " + searchQuery);
 }
