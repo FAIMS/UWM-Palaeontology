@@ -5,6 +5,7 @@
 addOnEvent("Control/Search", "show", "populateColumn()");
 addOnEvent("Control/Search/Select_Column", "click", "search()");
 
+// Populate Control/Search/Select_Column dropdown list with existing Column entities
 void populateColumn() {
   String refColumn = "Control/Search/Select_Column";
 
@@ -18,14 +19,19 @@ void populateColumn() {
   FetchCallback popColumn = new FetchCallback() {
     onFetch(result) {
       List l = new ArrayList();
+
+      // Add all option to the list
       List all = new ArrayList();
       all.add("");
       all.add("{All}");
       all.add("");
       all.add("");
 
+      // Add 'all' option to the List l
       l.add(all);
+      // Add all existing Column record to List l
       l.addAll(result);
+      // Populate dropdown list with List l
       populateDropDown(refColumn, l);
     }
   };
@@ -33,6 +39,8 @@ void populateColumn() {
   fetchAll(q, popColumn);
 }
 
+// Overrides auto-generated definition
+// Default search and option to restrict search according to Column entity chosen in Control/Search/Select_Column dropdown list
 void search(){
   String tabgroup = "Control";
   String refEntityList  = tabgroup + "/Search/Entity_List";
@@ -41,58 +49,60 @@ void search(){
   String refSelectColumn  = tabgroup + "/Search/Select_Column";
   String type = getFieldValue(refEntityTypes);
   String term = getFieldValue(refSearchTerm);
+  //Obtain value from Control/Search/Select_Column dropdown list
   String name = getFieldValue(refSelectColumn);
   String searchQuery = "";
-  //name is null for initial setup so do default search, name is empty if the 'All' option is chosen in the Select_Column field
+  // The field 'name' is null for initial setup so do default search, name is empty if the 'All' option is chosen in the Select_Column field
   if(name == null || name == "") {
-    searchQuery = "SELECT uuid, response "+
-                         "  FROM latestNonDeletedArchEntFormattedIdentifiers  "+
-                         " WHERE uuid in (SELECT uuid "+
-                         "                  FROM latestNonDeletedArchEntIdentifiers "+
-                         "                 WHERE measure LIKE {term}||'%'  "+
-                         "                   AND ( aenttypename = {type} OR '' = {type} ) "+
-                         "                )  "+
-                         " ORDER BY response "+
-                         " LIMIT ? "+
-                         "OFFSET ? ";
+    searchQuery =  "SELECT uuid, response "+
+                   "  FROM latestNonDeletedArchEntFormattedIdentifiers  "+
+                   " WHERE uuid in (SELECT uuid "+
+                   "                  FROM latestNonDeletedArchEntIdentifiers "+
+                   "                 WHERE measure LIKE {term}||'%'  "+
+                   "                   AND ( aenttypename = {type} OR '' = {type} ) "+
+                   "                )  "+
+                   " ORDER BY response "+
+                   " LIMIT ? "+
+                   "OFFSET ? ";
     searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
     searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
   } else {
-    //Filter according to chosen Column, entity type and search term
-    searchQuery = "  SELECT uuid, response " +
-                         "    FROM latestNonDeletedArchEntFormattedIdentifiers  " +
-                         "  WHERE uuid in (SELECT uuid " +
-                         "                  FROM latestNonDeletedArchEntIdentifiers " +
-                         "                 WHERE measure LIKE {term}||'%'  " +
-                         "                   AND ( aenttypename = {type} OR '' = {type} ) " +
-                         "                )  " +
-                         "    AND ( " +
-                         "        ('{name}' = '\\0') OR " +
-                         "        uuid IN ( SELECT childuuid " +
-                         "                    FROM parentchild  " +
-                         "                  WHERE parentuuid = {name}  " +
-                         "                  UNION  " +
-                         "                  SELECT b.childuuid" +
-                         "                    FROM parentchild a  " +
-                         "                  JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
-                         "                  WHERE a.parentuuid = {name} " +
-                         "                  UNION " +
-                         "                  SELECT uuid " +
-                         "                    FROM latestnondeletedarchentformattedidentifiers " +
-                         "                  WHERE uuid = {name}" +
-                         "                  )" +
-                         "        )" +
-                         "  ORDER BY response "+
-                         "  LIMIT ? " +
-                         "  OFFSET ? ";
+    // Search according to chosen Column, entity type and search term
+    searchQuery =  "SELECT uuid, response " +
+                   "    FROM latestNonDeletedArchEntFormattedIdentifiers  " +
+                   "  WHERE uuid in (SELECT uuid " +
+                   "                  FROM latestNonDeletedArchEntIdentifiers " +
+                   "                 WHERE measure LIKE {term}||'%'  " +
+                   "                   AND ( aenttypename = {type} OR '' = {type} ) " +
+                   "                )  " +
+                   "  AND ( " +
+                   "        ('{name}' = '\\0')" +
+                   "        OR " +
+                   "        uuid IN ( SELECT childuuid " +
+                   "                    FROM parentchild  " +
+                   "                  WHERE parentuuid = {name}  " +
+                   "                  UNION  " +
+                   "                  SELECT b.childuuid" +
+                   "                    FROM parentchild a  " +
+                   "                  JOIN parentchild b ON (a.childuuid = b.parentuuid)  "+
+                   "                  WHERE a.parentuuid = {name} " +
+                   "                  UNION " +
+                   "                  SELECT uuid " +
+                   "                    FROM latestnondeletedarchentformattedidentifiers " +
+                   "                  WHERE uuid = {name}" +
+                   "                 )" +
+                   "      )" +
+                   "  ORDER BY response "+
+                   "  LIMIT ? " +
+                   "  OFFSET ? ";
      searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
      searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
      searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
-     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
-     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
-     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
-     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = replaceFirst(searchQuery, "{name}", name);
   }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);
