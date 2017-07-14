@@ -77,7 +77,7 @@ void search(){
                    "                   AND ( aenttypename = {type} OR '' = {type} ) " +
                    "                )  " +
                    "  AND ( " +
-                   "        ('{name}' = '\\0')" +
+                   "        ({name} = '\\0')" +
                    "        OR " +
                    "        uuid IN ( SELECT childuuid " +
                    "                    FROM parentchild  " +
@@ -99,10 +99,10 @@ void search(){
      searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
      searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
      searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
   }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);

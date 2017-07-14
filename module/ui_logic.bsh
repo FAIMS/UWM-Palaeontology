@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: f9b420b59b5ebd166d37474868b228c85ea33514
+ * GENERATED WITH FAIMS-TOOLS, SHA1: 1e641bd240f5e3586cf372ec93ec17f4886ae204
  */
 import android.util.Log;
 import android.os.Build.MODEL;
@@ -1085,7 +1085,7 @@ void timedPopulateCursorList(String ref, String q, int limit) {
 }
 
 void setUpTypeHierarchy() {
-  //-
+  //- 
   //  - Column
   //    - Unit
   //      - Sample
@@ -2970,13 +2970,13 @@ void newColumn(String parent){
     parentTabgroup   = parent;
     parentTabgroup__ = parent;
   }
-
+  
 
   setUuid(tabgroup, null);
   newTabGroup(tabgroup);
   populateAuthorAndTimestamp(tabgroup);
   populateEntityListsInTabGroup(tabgroup);
-
+  
 
   executeOnEvent(tabgroup, "create");
 }
@@ -3039,7 +3039,7 @@ void duplicateColumn(){
   String uuidOld = getUuid(tabgroup);
   setUuid(tabgroup, "");
   disableAutoSave(tabgroup);
-
+  
   clearGpsInTabGroup(tabgroup);
   populateAuthorAndTimestamp(tabgroup);
   populateEntityListsInTabGroup(tabgroup);
@@ -3724,7 +3724,7 @@ void search(){
                    "                   AND ( aenttypename = {type} OR '' = {type} ) " +
                    "                )  " +
                    "  AND ( " +
-                   "        ('{name}' = '\\0')" +
+                   "        ({name} = '\\0')" +
                    "        OR " +
                    "        uuid IN ( SELECT childuuid " +
                    "                    FROM parentchild  " +
@@ -3746,10 +3746,11 @@ void search(){
      searchQuery = dbReplaceFirst(searchQuery, "{term}", term);
      searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
      searchQuery = dbReplaceFirst(searchQuery, "{type}", type);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
-     searchQuery = replaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     searchQuery = dbReplaceFirst(searchQuery, "{name}", name);
+     System.out.println(searchQuery);
   }
 populateCursorList(refEntityList, searchQuery, 25);
 refreshTabgroupCSS(tabgroup);
@@ -3768,7 +3769,7 @@ void loadScanValueToField(String ref){
   setFieldValue(ref, newCode);
 }
 addOnEvent("Sample/Info/Scan_Sample_Tag", "click", "scanSampleTag(\"Sample/Info/Sample_Tag\")");
-
+  
 
 /******************************************************************************/
 /*                                    INIT                                    */
