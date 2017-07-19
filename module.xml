@@ -62,13 +62,13 @@
       <Existing_Units t="list" f="nocertainty noannotation" ec="Unit"/>
     </Units>
   </Column>
-    <Unit>
+  <Unit>
     <Main>
       <author f="nocertainty noannotation"/>
       <timestamp f="nocertainty noannotation">
         Created at
       </timestamp>
-      <Locality_Abbreviated_Name f="id" i="Column/Description/Locality_Abbreviated_Name">
+      <Locality_Abbreviated_Name f="id readonly" i="Column/Description/Locality_Abbreviated_Name">
         <str>
           <pos>1</pos>
           <fmt>$0-</fmt>
@@ -216,7 +216,7 @@
           <fmt>$0-</fmt>
         </str>
       </Locality_Abbreviated_Name>
-      <Unit_ID f="id" i="Unit/Main/Unit_ID">
+      <Unit_ID f="id readonly" i="Unit/Main/Unit_ID">
         <str>
           <pos>2</pos>
           <fmt>$0-</fmt>

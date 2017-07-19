@@ -37,6 +37,7 @@
             </IDS>
             <Map>
               <Map/>
+              <Center_Me_1/>
             </Map>
             <Search>
               <Colgroup_0>
@@ -228,6 +229,9 @@
         <input faims_map="true" ref="Map">
           <label>{Map}</label>
         </input>
+        <trigger ref="Center_Me_1">
+          <label>{Center_Me}</label>
+        </trigger>
       </group>
       <group ref="Search" faims_scrollable="false">
         <label>{Search}</label>
@@ -391,7 +395,7 @@
         <input faims_attribute_name="Unit timestamp" faims_attribute_type="measure" ref="Unit_timestamp" faims_read_only="true">
           <label>{Created_at}</label>
         </input>
-        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name">
+        <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name" faims_read_only="true">
           <label>{Locality_Abbreviated_Name}</label>
         </input>
         <input faims_attribute_name="Unit ID" faims_attribute_type="measure" ref="Unit_ID">
@@ -491,7 +495,7 @@
         <input faims_attribute_name="Locality Abbreviated Name" faims_attribute_type="measure" ref="Locality_Abbreviated_Name" faims_read_only="true">
           <label>{Locality_Abbreviated_Name}</label>
         </input>
-        <input faims_attribute_name="Unit ID" faims_attribute_type="measure" ref="Unit_ID">
+        <input faims_attribute_name="Unit ID" faims_attribute_type="measure" ref="Unit_ID" faims_read_only="true">
           <label>{Unit_ID}</label>
         </input>
         <input faims_attribute_name="Sample ID" faims_attribute_type="measure" ref="Sample_ID">

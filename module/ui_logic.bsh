@@ -1,5 +1,5 @@
 /*
- * GENERATED WITH FAIMS-TOOLS, SHA1: 1e641bd240f5e3586cf372ec93ec17f4886ae204
+ * GENERATED WITH FAIMS-TOOLS, SHA1: 678f60842428cc01e5623bb2a0040e0adf9413c2
  */
 import android.util.Log;
 import android.os.Build.MODEL;
@@ -156,6 +156,7 @@ REF_TO_TYPE.put("Control/Main/Existing_Localities", "list");
 REF_TO_TYPE.put("Control/IDS/Next_Unit_ID", "input");
 REF_TO_TYPE.put("Control/IDS/Next_Sample_ID", "input");
 REF_TO_TYPE.put("Control/Map/Map", "map");
+REF_TO_TYPE.put("Control/Map/Center_Me_1", "button");
 REF_TO_TYPE.put("Control/Search/Search_Term", "input");
 REF_TO_TYPE.put("Control/Search/Search_Button", "button");
 REF_TO_TYPE.put("Control/Search/Entity_Types", "dropdown");
@@ -756,6 +757,7 @@ void makeLocalId(){
       "    id              INTEGER PRIMARY KEY," +
       "    deviceModel     TEXT," +
       "    sessStartMs     INTEGER," +
+      "    parentNameSpace TEXT," +
       "    srcLine         TEXT," +
       "    query           TEXT," +
       "    queryStartMs    INTEGER," +
@@ -1010,17 +1012,19 @@ TimedFetchCallback(String query, FetchCallback cb, int callerIdx) {
   }
 
   void updatePerfLog() {
-    String deviceModel  = android.os.Build.MODEL;
-    String sessStartMs  = SESS_START_TIME + "";
-    String srcLine      = super.cs_.get(super.callerIdx).getInvocationLine()+"";
-    String query        = super.query;
-    String queryStartMs = super.startTime + "";
-    String queryStopMs  = super.stopTime + "";
+    String deviceModel     = android.os.Build.MODEL;
+    String sessStartMs     = SESS_START_TIME + "";
+    String parentNameSpace = cs_.get(callerIdx + 1).getName() + "";
+    String srcLine         = cs_.get(callerIdx + 0).getInvocationLine() + "";
+    String query           = query;
+    String queryStartMs    = startTime + "";
+    String queryStopMs     = stopTime + "";
 
     String updateQuery = "";
     updateQuery += " INSERT INTO perflog (";
     updateQuery += "             deviceModel,";
     updateQuery += "             sessStartMs,";
+    updateQuery += "             parentNameSpace,";
     updateQuery += "             srcLine,";
     updateQuery += "             query,";
     updateQuery += "             queryStartMs,";
@@ -1029,7 +1033,7 @@ TimedFetchCallback(String query, FetchCallback cb, int callerIdx) {
     updateQuery += "             numAentvalue,";
     updateQuery += "             numRelationship,";
     updateQuery += "             numAentreln";
-    updateQuery += " )    SELECT %s, %s, %s, %s, %s, %s, a, av, r, ar";
+    updateQuery += " )    SELECT %s, %s, %s, %s, %s, %s, %s, a, av, r, ar";
     updateQuery += "        FROM";
     updateQuery += "             (SELECT COUNT(*) AS a  FROM archentity  ) a,";
     updateQuery += "             (SELECT COUNT(*) AS av FROM aentvalue   ) av,";
@@ -1038,6 +1042,7 @@ TimedFetchCallback(String query, FetchCallback cb, int callerIdx) {
 
     updateQuery = dbReplaceFirst(updateQuery, deviceModel);
     updateQuery = dbReplaceFirst(updateQuery, sessStartMs);
+    updateQuery = dbReplaceFirst(updateQuery, parentNameSpace);
     updateQuery = dbReplaceFirst(updateQuery, srcLine);
     updateQuery = dbReplaceFirst(updateQuery, query);
     updateQuery = dbReplaceFirst(updateQuery, queryStartMs);
@@ -2192,7 +2197,7 @@ String getMenuValue(String ref) {
 }
 
 /******************************************************************************/
-/*                                    GPS                                     */
+/*                                  GPS/MAP                                   */
 /******************************************************************************/
 
 
@@ -2258,6 +2263,9 @@ void updateGPSDiagnostics() {
   }
   setFieldValue(diagnosticsRef, status);
 }
+
+void centerMe() { centerOnCurrentPosition("Control/Map/Map"); }
+addOnEvent("Control/Map/Center_Me_1", "click", "centerMe()");
 
 /******************************************************************************/
 /*                                 ACTION BAR                                 */
