@@ -18,7 +18,7 @@ FAIMS **v2.5** (Android 6+)
 This module is licensed under an international Creative Commons Attribution 4.0 Licence (**CC BY 4.0**).
 
 ## Access:
-The module can be downloaded from this GitHub repository.
+The module is made for demostration purposes and it can be downloaded from this GitHub repository.
 
 ## This module contains the following FAIMS features:
 * user sign-up (users can create their own accounts)
